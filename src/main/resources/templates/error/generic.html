@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es"
+    th:replace="~{fragments/layout :: layout(~{::title}, ~{::link}, 'error', ~{::main},~{::script})}">
+
+<head>
+    <title>AddVenture - Error inesperado</title>
+    <link rel="stylesheet" th:href="@{/css/error_generic.css}">
+</head>
+
+<body>
+    <main>
+        <div class="error-wrapper">
+            <div class="error-content">
+                <h1>Oops!</h1>
+                <h2>Algo salió mal</h2>
+                <p>No sabemos exactamente qué ocurrió, pero estamos trabajando para solucionarlo.<br>
+                    Intenta nuevamente más tarde o vuelve al inicio.</p>
+                <a href="/" class="btn-home">
+                    <i class="bi bi-house-door-fill"></i> Volver al inicio
+                </a>
+            </div>
+            <div class="error-image"></div>
+        </div>
+    </main>
+    <script></script>
+</body>
+
+</html>

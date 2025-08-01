@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/layout :: layout(~{::title}, ~{::link}, 'detalles-viaje', ~{::main}, ~{::script})}">
+
+<head>
+    <title>AddVenture - Detalles del Viaje</title>
+    <link rel="stylesheet" th:href="@{/css/detalles-viaje.css}">
+</head>
+
+<body>
+    <main class="container py-4 py-md-5">
+        <!-- Mensajes de error o éxito -->
+        <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show alert-auto" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${mensajeError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show alert-auto" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${mensajeExito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="mb-4">
+            <a th:href="@{/mis-viajes}" class="back-link">
+                <i class="bi bi-arrow-left me-2"></i>Volver a Mis Viajes
+            </a>
+        </div>
+
+        <!-- Card para el detalle del viaje -->
+        <div class="card shadow-sm border-light mb-5">
+            <!-- Hero Image -->
+            <div class="position-relative">
+                <div class="hero-image" th:style="'background-image: url(' + ${grupo.imagenDestacada} + ');'">
+                    <div class="overlay-gradient"></div>
+                </div>
+                <div class="position-absolute bottom-0 start-0 p-4 text-white">
+                    <h1 class="display-6 fw-bold mb-2" th:text="${grupo.nombreViaje}"></h1>
+                    <p class="fs-5 d-flex align-items-center">
+                        <i class="bi bi-geo-alt me-1"></i>
+                        <span th:text="${grupo.destinoPrincipal}"></span>
+                    </p>
+                </div>
+                <span class="position-absolute top-0 end-0 m-3 badge badge-estado text-uppercase" th:classappend="'bg-' + (${grupo.estado} == 'activo' ? 'success' : 
+                                                (${grupo.estado} == 'en_curso' ? 'warning' : 
+                                                 (${grupo.estado} == 'finalizado' ? 'secondary' : 'light')))">
+                    <i class="bi bi-hourglass-split me-1"></i>
+                    <span th:text="${#strings.replace(grupo.estado, '_', ' ')}"></span>
+                </span>
+            </div>
+
+            <!-- Información del viaje -->
+            <div class="card-body p-4">
+                <div class="row">
+                    <!-- Contenido principal -->
+                    <div class="col-md-8 mb-4 mb-md-0">
+                        <!-- Descripción -->
+                        <div class="mb-5">
+                            <h2 class="fs-3 fw-bold mb-3">Descripción</h2>
+                            <p class="text-secondary" th:text="${grupo.descripcion}"></p>
+                        </div>
+
+                        <!-- Etiquetas -->
+                        <div class="mb-5" th:if="${not #sets.isEmpty(grupo.etiquetas)}">
+                            <h2 class="fs-3 fw-bold mb-3">Etiquetas</h2>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span th:each="etiqueta : ${grupo.etiquetas}" class="badge bg-secondary rounded-pill">
+                                    <i class="bi bi-tag me-1"></i>
+                                    <span th:text="${etiqueta.nombreEtiqueta}"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Itinerario -->
+                        <div class="mb-5">
+                            <h2 class="fs-3 fw-bold mb-3">Itinerario</h2>
+                            <div class="accordion" id="itineraryAccordion">
+                                <div class="accordion-item" th:each="itinerario, iterStat : ${itinerarios}">
+                                    <h2 class="accordion-header" th:id="'heading' + ${iterStat.index}">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse"
+                                            th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false"
+                                            th:aria-controls="'collapse' + ${iterStat.index}">
+                                            <strong
+                                                th:text="${'Día ' + itinerario.diaNumero + ': ' + itinerario.titulo}"></strong>
+                                        </button>
+                                    </h2>
+                                    <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse"
+                                        th:aria-labelledby="'heading' + ${iterStat.index}"
+                                        data-bs-parent="#itineraryAccordion">
+                                        <div class="accordion-body" th:text="${itinerario.descripcion}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Miembros del grupo -->
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="fs-3 fw-bold mb-0">Miembros del grupo</h2>
+                                <!-- <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    data-bs-target="#calificarModal">
+                                    <i class="bi bi-star me-2"></i>Calificar viajeros
+                                </button> -->
+                            </div>
+                            <!-- Contenedor de miembros -->
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                                <!-- Organizador -->
+                                <div class="col">
+                                    <a th:href="@{/perfil/{nombreUsuario}(nombreUsuario=${grupo.creador.nombreUsuario})}"
+                                        class="text-decoration-none text-dark">
+                                        <div class="member-card text-center position-relative h-100">
+                                            <i class="bi bi-box-arrow-up-right position-absolute top-0 end-0 m-2 text-muted small" title="Ver perfil"></i>
+                                            <div class="avatar-container mx-auto mb-2">
+                                                <img th:src="@{/uploads/{img}(img=${grupo.creador.fotoPerfil})}" class="avatar-img"
+                                                    th:alt="${grupo.creador.nombre + ' ' + grupo.creador.apellido}" />
+                                            </div>
+                                            <div class="fw-medium"
+                                                th:text="${grupo.creador.nombre + ' ' + grupo.creador.apellido}">
+                                            </div>
+                                            <div class="organizer-label mt-1">Organizador</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <!-- Participantes -->
+                                <div class="col" th:each="participacion : ${grupo.participantes}"
+                                    th:if="${participacion.usuario != null and participacion.usuario.nombreUsuario != null and participacion.usuario.id != grupo.creador.id}">
+                                    <div class="member-card text-center position-relative h-100">
+                                        <a th:href="@{'/perfil/' + ${#uris.escapePath(participacion.usuario.nombreUsuario)}}"
+                                            style="text-decoration: none; color: inherit;">
+                                            <i class="bi bi-box-arrow-up-right position-absolute top-0 end-0 m-2 text-muted small" title="Ver perfil"></i>
+                                            <div class="avatar-container mx-auto mb-2">
+                                                <img th:src="@{/uploads/{img}(img=${participacion.usuario.fotoPerfil})}" class="avatar-img"
+                                                    th:alt="${participacion.usuario.nombre + ' ' + participacion.usuario.apellido}" />
+                                            </div>
+                                            <div class="fw-medium"
+                                                th:text="${participacion.usuario.nombre + ' ' + participacion.usuario.apellido}">
+                                            </div>
+                                        </a>
+                                        <!-- Botón para expulsar (solo si es el creador) -->
+                                        <form
+                                            th:if="${esCreador && (#strings.equalsIgnoreCase(grupo.estado, 'activo') || #strings.equalsIgnoreCase(grupo.estado, 'finalizado'))}"
+                                            th:action="@{/grupo/{id}/expulsar/{usuarioId}(id=${grupo.idGrupo}, usuarioId=${participacion.usuario.id})}"
+                                            method="post"
+                                            onsubmit="return confirm('¿Estás seguro de que deseas expulsar a este participante?');"
+                                            class="mt-2">
+                                            <button class="btn btn-sm btn-outline-danger w-100" type="submit">
+                                                <i class="bi bi-person-dash me-1"></i>Expulsar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solicitantes -->
+                        <div th:if="${esCreador && #strings.equalsIgnoreCase(grupo.estado, 'activo')}" class="mt-5">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="fs-3 fw-bold mb-0">Solicitudes pendientes</h2>
+                            </div>
+                            <!-- Div informativo si no hay solicitudes -->
+                            <div th:if="${#lists.isEmpty(solicitudesPendientes)}" class="alert alert-info text-center">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Aún no tienes solicitudes pendientes. Estas aparecerán aquí cuando el grupo esté lleno. 🔒
+                            </div>
+                            <!-- Lista de solicitantes -->
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"
+                                th:if="${!#lists.isEmpty(solicitudesPendientes)}">
+                                <div class="col" th:each="solicitud : ${solicitudesPendientes}">
+                                    <a th:href="@{/perfil/{nombreUsuario}(nombreUsuario=${solicitud.solicitante.nombreUsuario})}"
+                                        class="text-decoration-none text-dark">
+                                        <div class="member-card text-center position-relative h-100 border border-primary">
+                                            <i class="bi bi-box-arrow-up-right position-absolute top-0 end-0 m-2 text-muted small" title="Ver perfil"></i>
+                                            <div class="avatar-container mx-auto mb-2">
+                                                <img th:src="@{/uploads/{img}(img=${solicitud.solicitante.fotoPerfil})}" class="avatar-img"
+                                                    th:alt="${solicitud.solicitante.nombre + ' ' + solicitud.solicitante.apellido}" />
+                                            </div>
+                                            <div class="fw-medium" th:text="${solicitud.solicitante.nombre + ' ' + solicitud.solicitante.apellido}">
+                                            </div>
+                                            <!-- Botones Aceptar / Rechazar -->
+                                            <div class="d-grid gap-2 mt-2">
+                                                <form th:action="@{/solicitudes/{id}/aceptar(id=${solicitud.idSolicitud})}" method="post">
+                                                    <button class="btn btn-sm btn-outline-success w-100" type="submit">
+                                                        <i class="bi bi-check2 me-1"></i>Aceptar
+                                                    </button>
+                                                </form>
+                                                <form th:action="@{/solicitudes/{id}/rechazar(id=${solicitud.idSolicitud})}" method="post"
+                                                    onsubmit="return confirm('¿Seguro que deseas rechazar esta solicitud?');">
+                                                    <button class="btn btn-sm btn-outline-danger w-100" type="submit">
+                                                        <i class="bi bi-x me-1"></i>Rechazar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <!-- Detalles del viaje -->
+                        <div class="card mb-4 border-light shadow-sm">
+                            <div class="card-body">
+                                <h3 class="fs-5 fw-bold mb-3">Detalles del viaje</h3>
+                                <!-- Fechas -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-calendar3 text-primary fs-5 me-3"></i>
+                                        <div>
+                                            <p class="text-muted small mb-0">Fechas</p>
+                                            <p class="fw-medium mb-0">
+                                                <span
+                                                    th:text="${#temporals.format(grupo.fechaInicio, 'dd/MM/yyyy')}"></span>
+                                                -
+                                                <span
+                                                    th:text="${#temporals.format(grupo.fechaFin, 'dd/MM/yyyy')}"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Participantes -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-people text-primary fs-5 me-3"></i>
+                                        <div>
+                                            <p class="text-muted small mb-0">Participantes</p>
+                                            <p class="fw-medium mb-0"
+                                                th:text="${#lists.size(grupo.participantes) + '/' + grupo.maxParticipantes + ' viajeros'}">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Punto de encuentro -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-geo-alt text-primary fs-5 me-3"></i>
+                                        <div>
+                                            <p class="text-muted small mb-0">Punto de encuentro</p>
+                                            <p class="fw-medium mb-0" th:text="${grupo.puntoEncuentro}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Rango de edad -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-person-circle text-primary fs-5 me-3"></i>
+                                        <div>
+                                            <p class="text-muted small mb-0">Rango de edad</p>
+                                            <p class="fw-medium mb-0">
+                                                <span th:text="${grupo.rangoEdadMin}"></span> -
+                                                <span th:text="${grupo.rangoEdadMax}"></span> años
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Tipo de grupo-->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-gender-ambiguous text-primary fs-5 me-3"></i>
+                                        <div>
+                                            <p class="text-muted small mb-0">Tipo de grupo</p>
+                                            <p class="fw-medium mb-0" th:text="${grupo.tipoGrupo}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enlace al grupo de WhatsApp (solo para participantes y creador) -->
+                        <div th:if="${esParticipante or esCreador}"
+                            class="alert alert-success d-flex align-items-center justify-content-between my-4 p-3">
+                            <div>
+                                <i class="bi bi-whatsapp me-1 fs-5 text-success"></i>
+                                <strong>Grupo de WhatsApp:</strong>
+                                <a th:href="${grupo.linkGrupoWhatsapp}" target="_blank" rel="noopener noreferrer"
+                                    class="ms-1 text-decoration-underline text-success fw-semibold">
+                                    Únete aquí para coordinar tu viaje
+                                </a>
+                            </div>
+                            <button class="btn btn-sm btn-outline-success" onclick="copiarEnlaceWhatsapp()" title="Copiar enlace">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <!-- Botones para el creador -->
+                        <div th:if="${esCreador}" class="d-grid gap-2 d-md-flex justify-content-md-start">
+                            <a th:if="${#strings.equalsIgnoreCase(grupo.estado, 'activo')}"
+                                th:href="@{/mis-viajes/editar/{id}(id=${grupo.idGrupo})}"
+                                class="btn btn-outline-primary flex-md-grow-1">
+                                <i class="bi bi-pencil me-1"></i>Editar
+                            </a>
+                            <form
+                                th:if="${#strings.equalsIgnoreCase(grupo.estado, 'activo') or #strings.equalsIgnoreCase(grupo.estado, 'finalizado')}"
+                                th:action="@{/mis-viajes/eliminar/{id}(id=${grupo.idGrupo})}" method="post"
+                                class="flex-md-grow-1"
+                                onsubmit="return confirm('¿Estás seguro de que deseas desactivar este grupo?');">
+                                <button type="submit" class="btn btn-outline-danger w-100">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </button>
+                            </form>
+                        </div>
+                        <!-- Botones para los participantes (excluyendo al creador) -->
+                        <div th:if="${usuarioLogueado != null AND !esCreador}">
+                            <form th:if="${!esParticipante and #strings.equalsIgnoreCase(grupo.estado, 'activo') and !yaSolicito and !permiteSolicitudes}"
+                                th:action="@{/grupo/{id}/unirse(id=${grupo.idGrupo})}" method="post">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-person-plus-fill me-2"></i>Unirme al Grupo
+                                </button>
+                            </form>
+                            <form
+                                th:if="${esParticipante and (#strings.equalsIgnoreCase(grupo.estado, 'activo') or #strings.equalsIgnoreCase(grupo.estado, 'finalizado'))}"
+                                th:action="@{/grupo/{id}/salirse(id=${grupo.idGrupo})}" method="post"
+                                onsubmit="return confirm('¿Estás seguro de que quieres salir de este grupo?');">
+                                <button type="submit" class="btn btn-danger w-100">
+                                    <i class="bi bi-person-x-fill me-2"></i>Salirme del Grupo
+                                </button>
+                            </form>
+                        </div>
+                        <!-- Mensaje informativo si el grupo está lleno -->
+                        <div th:if="${!esCreador and !esParticipante and #strings.equalsIgnoreCase(grupo.estado, 'activo') and grupoLleno}"
+                            class="alert alert-warning text-center mt-3">
+                            <i class="bi bi-exclamation-circle me-1"></i>
+                            Este grupo ya está completo o tiene solicitudes pendientes. Si deseas unirte, puedes enviar una solicitud. ✉️
+                        </div>
+                        <!-- Botones para los usuarios que deseen solicitar unirse -->
+                        <div th:if="${!esCreador and !esParticipante and grupo.estado.equalsIgnoreCase('activo') and permiteSolicitudes and !yaSolicito}"
+                            class="d-grid gap-2 d-md-flex justify-content-md-start mt-3">
+                            <form th:action="@{/{id}/solicitar(id=${grupo.idGrupo})}" method="post" class="flex-grow-1">
+                                <button type="submit" class="btn btn-outline-success w-100">
+                                    <i class="bi bi-envelope-plus me-1"></i>
+                                    Solicitar unirse al grupo
+                                </button>
+                            </form>
+                        </div>
+                        <!-- Botón para cancelar solicitud -->
+                        <div th:if="${!esCreador and !esParticipante and grupo.estado.equalsIgnoreCase('activo') and permiteSolicitudes and yaSolicito}"
+                            class="d-grid gap-2 d-md-flex justify-content-md-start mt-3">
+                            <form th:action="@{/{id}/cancelar-solicitud(id=${grupo.idGrupo})}" method="post" class="flex-grow-1"
+                                onsubmit="return confirm('¿Estás seguro de que deseas cancelar tu solicitud a este grupo?');">
+                                <button type="submit" class="btn btn-outline-danger w-100">
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Cancelar solicitud
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/detalles-viaje.js}"></script>
+</body>
+
+</html>

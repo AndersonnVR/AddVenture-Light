@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::link}, 'mis-solicitudes', ~{::main}, ~{::script})}">
+
+<head>
+    <title>AddVenture - Mis Solicitudes</title>
+    <link rel="stylesheet" th:href="@{/css/mis-solicitudes.css}">
+</head>
+
+<body>
+    <main class="container py-4 py-md-5">
+
+        <!-- Mensajes de error o éxito -->
+        <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${mensajeError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${mensajeExito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="mb-4">
+            <a th:href="@{/mis-viajes}" class="back-link">
+                <i class="bi bi-arrow-left me-2"></i>Volver a Mis Viajes
+            </a>
+        </div>
+
+        <div class="mb-4 main-title-container">
+            <div class="main-title-content">
+                <div class="mb-3">
+                    <h1 class="fw-bold mb-2">Mis Solicitudes</h1>
+                    <p class="text-muted">Grupos de viaje a los que has solicitado unirte</p>
+                </div>
+                <div class="button-container">
+                    <a th:href="@{/buscar-grupos}" class="btn btn-primary btn-explore">
+                        <i class="bi bi-binoculars me-2"></i>Explorar grupos de viaje
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--FILTRO-->
+        <div class="card mb-4 border-light shadow-sm">
+            <div class="card-body p-4">
+                <ul class="nav nav-tabs mb-4" id="searchTabs" role="tablist">
+                    <li class="nav-item flex-fill text-center" role="presentation">
+                        <button class="nav-link active w-100" id="quick-search-tab" data-bs-toggle="tab"
+                            data-bs-target="#quick-search" type="button" role="tab">Búsqueda rápida</button>
+                    </li>
+                </ul>
+        
+                <div class="tab-content" id="searchTabsContent">
+                    <!-- Búsqueda rápida -->
+                    <div class="tab-pane fade show active" id="quick-search" role="tabpanel">
+                        <form method="get" th:action="@{/mis-viajes/solicitudes}" class="row g-3 mb-2">
+                            <div class="col-md-4">
+                                <label for="destino" class="form-label">Destino</label>
+                                <input type="text" class="form-control form-control-lg" id="destino" name="destinoPrincipal" th:value="${destinoPrincipal}"
+                                    placeholder="Ej: Perú">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fecha-inicio" class="form-label">Fecha de inicio</label>
+                                <input type="date" class="form-control form-control-lg" name="fechaInicio" id="fecha-inicio"
+                                    th:value="${fechaInicio}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fecha-fin" class="form-label">Fecha de fin</label>
+                                <input type="date" class="form-control form-control-lg" name="fechaFin" id="fecha-fin" th:value="${fechaFin}">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="bi bi-search me-2"></i>Buscar Grupos
+                                </button>
+                            </div>
+                        </form>
+                        <div th:if="${error}" class="alert alert-danger text-center">
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor de cards de viajes con solicitud pendiente -->
+        <div class="row g-4 row-cards-container">
+
+            <!-- Mensaje cuando no hay grupos -->
+            <div th:if="${pagina.empty} and !${mensaje}">
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Aún no has solicitado unirte a ningún grupo de viaje ☹️. ¡Explora y envía tu solicitud a uno!
+                </div>
+            </div>
+
+            <!-- Mensaje cuando no hay grupos filtrados -->
+            <div th:if="${pagina.empty} and ${mensaje}">
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    No se encontraron grupos que coincidan con la búsqueda ☹️.
+                </div>
+            </div>
+
+            <!-- Iteración sobre los grupos -->
+            <div th:each="grupo : ${pagina.content}" class="col-md-6 col-lg-4 trip-card">
+                <div class="card custom-card h-100 border hover-shadow">
+                    <div class="position-relative card-img-top-container">
+                        <img th:src="${grupo.imagenDestacada}" class="card-img-top" th:alt="${grupo.nombreViaje}">
+                        <span class="position-absolute top-0 start-0 m-2 badge badge-informacion bg-primary rounded-pill">
+                            <i class="bi bi-geo-alt me-1"></i>
+                            <span th:text="${grupo.destinoPrincipal}"></span>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <!-- Titulo del viaje -->
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="card-title fw-bold" th:text="${grupo.nombreViaje}"></h3>
+                        </div>
+
+                        <!-- Fechas -->
+                        <div class="d-flex align-items-center text-muted mb-3">
+                            <i class="bi bi-calendar3 text-primary me-2"></i>
+                            <div>
+                                <span class="fw-medium">Inicio:</span>
+                                <span th:text="${#temporals.format(grupo.fechaInicio, 'dd/MM/yyyy')}"></span> •
+                                <span class="fw-medium">Fin:</span>
+                                <span th:text="${#temporals.format(grupo.fechaFin, 'dd/MM/yyyy')}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Participantes -->
+                        <div class="d-flex align-items-center text-muted mb-3">
+                            <i class="bi bi-people text-primary me-2"></i>
+                            <div>
+                                <span class="fw-medium">Participantes:</span>
+                                <span th:text="${#lists.size(grupo.participantes) + '/' + grupo.maxParticipantes + ' viajeros'}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Etiquetas -->
+                        <div class="mb-3" th:if="${not #sets.isEmpty(grupo.etiquetas)}">
+                            <div class="d-flex flex-wrap gap-2">
+                                <span th:each="etiqueta : ${grupo.etiquetas}" 
+                                      class="badge bg-secondary rounded-pill">
+                                    <i class="bi bi-tag me-1"></i>
+                                    <span th:text="${etiqueta.nombreEtiqueta}">Etiqueta</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Botón para Ver Detalles -->
+                        <div class="d-grid d-md-flex">
+                            <a th:href="@{/mis-viajes/{id}(id=${grupo.idGrupo})}" 
+                               class="btn btn-dark flex-md-grow-1 btn-details">
+                                <i class="bi bi-eye me-1"></i>Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Paginación -->
+        <div class="d-flex justify-content-center mt-5" th:if="${pagina.totalPages > 1}">
+            <nav aria-label="Paginación de resultados">
+                <ul class="pagination">
+        
+                    <!-- Botón Anterior -->
+                    <li class="page-item" th:classappend="${pagina.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/mis-viajes(page=${pagina.number - 1}, size=${pagina.size}, destinoPrincipal=${destinoPrincipal}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin} )}"
+                            aria-label="Anterior">
+                            <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                        </a>
+                    </li>
+        
+                    <!-- Números de página -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}"
+                        th:classappend="${i == pagina.number} ? 'active'">
+                        <a class="page-link" th:href="@{/mis-viajes(page=${i}, size=${pagina.size}, destinoPrincipal=${destinoPrincipal}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin})}" th:text="${i + 1}">1</a>
+                    </li>
+        
+                    <!-- Botón Siguiente -->
+                    <li class="page-item" th:classappend="${pagina.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/mis-viajes(page=${pagina.number + 1}, size=${pagina.size}, destinoPrincipal=${destinoPrincipal}, fechaInicio=${fechaInicio}, fechaFin=${fechaFin})}"
+                            aria-label="Siguiente">
+                            <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                        </a>
+                    </li>
+        
+                </ul>
+            </nav>
+        </div>
+
+    </main>
+
+    <script></script>
+</body>

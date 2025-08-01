@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/layout :: layout(~{::title}, ~{::link}, 'crear-grupo', ~{::main}, ~{::script})}">
+
+<head>
+    <title>AddVenture - Editar Grupo</title>
+    <link rel="stylesheet" th:href="@{/css/crear-grupo.css}">
+</head>
+
+<body>
+    <main class="container py-4">
+        <!-- Botón para volver a Mis Viajes -->
+        <a th:href="@{/mis-viajes}" class="back-link">
+            <i class="bi bi-arrow-left me-2"></i>Volver a Mis Viajes
+        </a>
+
+        <!-- Título y descripción -->
+        <div class="mb-4">
+            <h1 class="fw-bold mb-2">Editar Grupo de Viaje</h1>
+            <p class="text-secondary">
+                Modifica la información del grupo. Los cambios se guardarán al hacer clic en el botón "Guardar Cambios".
+            </p>
+        </div>
+
+        <!-- Mensajes de error o éxito -->
+        <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${mensajeError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${mensajeExito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Card para el formulario -->
+        <div class="card mx-auto" style="max-width: 900px;">
+            <!-- Encabezado de la card -->
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Información del grupo</h5>
+            </div>
+            <!-- Cuerpo de la card -->
+            <div class="card-body p-4">
+                <!-- Formulario -->
+                <form th:action="@{/mis-viajes/editar/{id}(id=${grupoViaje.idGrupo})}" th:object="${grupoViaje}"
+                    method="post" id="editarGrupoForm" class="needs-validation" novalidate>
+
+                    <!-- Alertas de validación globales -->
+                    <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+                        <ul class="mb-0">
+                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+
+                    <!-- Campos ocultos para datos no editables -->
+                    <input type="hidden" th:field="*{idGrupo}">
+                    <input type="hidden" id="fechaInicio" th:field="*{fechaInicio}">
+                    <input type="hidden" id="fechaFin" th:field="*{fechaFin}">
+                    <input type="hidden" th:field="*{creador}"> 
+
+                    <!-- Campo para el nombre del viaje -->
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="nombreViaje">
+                            <i class="bi bi-flag-fill me-2 text-primary"></i>Nombre del viaje
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="nombreViaje" th:field="*{nombreViaje}"
+                            placeholder="Ej: Aventura en Machu Picchu" required maxlength="100">
+                        <div class="invalid-feedback">
+                            El nombre del viaje es obligatorio y no puede superar los 100 caracteres.
+                        </div>
+                        <div class="text-danger" th:if="${#fields.hasErrors('nombreViaje')}" th:errors="*{nombreViaje}">
+                        </div>
+                    </div>
+
+                    <!-- Campo para el destino principal del viaje -->
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="destinoPrincipal">
+                            <i class="bi bi-map-fill me-2 text-success"></i>Destino principal
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="destinoPrincipal" th:field="*{destinoPrincipal}"
+                            placeholder="Ej: Cusco, Perú" required maxlength="100">
+                        <div class="invalid-feedback">
+                            El destino principal es obligatorio y no puede superar los 100 caracteres.
+                        </div>
+                        <div class="text-danger" th:if="${#fields.hasErrors('destinoPrincipal')}"
+                            th:errors="*{destinoPrincipal}"></div>
+                    </div>
+
+                    <!-- Campo para los rangos de edades -->
+                    <div class="row">
+                        <!-- Edad mínima -->
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="rangoEdadMin">
+                                    <i class="bi bi-person-fill-dash me-2 text-danger"></i>Edad mínima
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="rangoEdadMin"
+                                        th:field="*{rangoEdadMin}" aria-describedby="inputGroupPrepend" min="18"
+                                        max="65" required>
+                                    <span class="input-group-text" id="inputGroupPrepend">años</span>
+                                    <div class="invalid-feedback">
+                                        La edad mínima debe ser al menos 18 años.
+                                    </div>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('rangoEdadMin')}"
+                                        th:errors="*{rangoEdadMin}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Edad máxima -->
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="rangoEdadMax">
+                                    <i class="bi bi-person-fill-dash me-2 text-danger"></i>Edad máxima
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="rangoEdadMax"
+                                        th:field="*{rangoEdadMax}" aria-describedby="inputGroupPrepend" min="18"
+                                        max="65" required>
+                                    <span class="input-group-text" id="inputGroupPrepend">años</span>
+                                    <div class="invalid-feedback">
+                                        La edad máxima no puede superar los 65 años.
+                                    </div>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('rangoEdadMax')}"
+                                        th:errors="*{rangoEdadMax}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campo para el tipo de grupo -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="tipoGrupo">
+                                    <i class="bi bi-people-fill me-2 text-success"></i>Tipo de grupo
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" id="tipoGrupo" th:field="*{tipoGrupo}" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Mixto">Mixto</option>
+                                    <option value="Hombres">Solo hombres</option>
+                                    <option value="Mujeres">Solo mujeres</option>
+                                </select>
+                                <div class="invalid-feedback">Por favor, selecciona un tipo de grupo.</div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('tipoGrupo')}"
+                                    th:errors="*{tipoGrupo}"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="maxParticipantes">
+                                    <i class="bi bi-people-fill me-2 text-success"></i>Número máximo de participantes
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" id="maxParticipantes" th:field="*{maxParticipantes}"
+                                    required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="2">2 personas</option>
+                                    <option value="3">3 personas</option>
+                                    <option value="4">4 personas</option>
+                                    <option value="5">5 personas</option>
+                                    <option value="6">6 personas</option>
+                                    <option value="7">7 personas</option>
+                                    <option value="8">8 personas</option>
+                                </select>
+                                <div class="invalid-feedback">Debe haber al menos dos participantes.</div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('maxParticipantes')}"
+                                    th:errors="*{maxParticipantes}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campo para la descripción del viaje -->
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="descripcion">
+                            <i class="bi bi-pencil-fill me-2 text-primary"></i>Descripción del viaje (opcional)
+                        </label>
+                        <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="3"
+                            placeholder="Describe los detalles del viaje, actividades planeadas, qué tipo de viajeros buscas, etc."></textarea>
+                    </div>
+
+                    <!-- Campo para el punto de encuentro -->
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="puntoEncuentro">
+                            <i class="bi bi-geo-alt-fill me-2 text-warning"></i>Punto de encuentro
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="puntoEncuentro" th:field="*{puntoEncuentro}"
+                            placeholder="Ej: Plaza de Armas de Cusco" required>
+                        <div class="invalid-feedback">
+                            El punto de encuentro es obligatorio.
+                        </div>
+                        <div class="text-danger" th:if="${#fields.hasErrors('puntoEncuentro')}"
+                            th:errors="*{puntoEncuentro}"></div>
+                    </div>
+
+                    <!-- Campo para la imagen del viaje -->
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="imagenDestacada">
+                            <i class="bi bi-image-fill me-2 text-success"></i>Imagen del viaje
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="imagenDestacada" th:field="*{imagenDestacada}"
+                            placeholder="Ej: https://ejemplo.com/imagen.jpg" required>
+                        <div class="invalid-feedback">
+                            La imagen destacada es obligatoria.
+                        </div>
+                        <div class="text-danger" th:if="${#fields.hasErrors('imagenDestacada')}"
+                            th:errors="*{imagenDestacada}"></div>
+                    </div>
+
+                    <!-- Campo para el enlace del grupo de WhatsApp -->
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="linkGrupoWhatsapp">
+                            <i class="bi bi-link-45deg me-2 text-success"></i>Enlace de grupo de WhatsApp
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="linkGrupoWhatsapp" th:field="*{linkGrupoWhatsapp}" pattern="https://chat\.whatsapp\.com/[A-Za-z0-9]{22}/?"
+                            placeholder="Ej: https://chat.whatsapp.com/ABC123def456GHI789jkl0M" required>
+                        <div class="invalid-feedback">El enlace al grupo de WhatsApp es obligatorio.</div>
+                        <div class="text-danger" th:if="${#fields.hasErrors('linkGrupoWhatsapp')}" th:errors="*{linkGrupoWhatsapp}"></div>
+                    </div>
+
+                    <!-- Campo para mostrar las etiquetas del viaje (solo lectura) -->
+                    <div class="form-group mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-tags-fill me-2 text-info"></i>Etiquetas del viaje
+                        </label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span th:each="etiqueta : ${grupoViaje.etiquetas}" class="badge bg-primary rounded-pill"
+                                th:text="${etiqueta.nombreEtiqueta}">
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Itinerario -->
+                    <div class="form-group my-4" id="itineraryContainer">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-medium">
+                                Itinerario del viaje
+                                <span class="text-muted"
+                                    th:text="'(' + ${#temporals.format(grupoViaje.fechaInicio, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(grupoViaje.fechaFin, 'dd/MM/yyyy')} + ')'"></span>
+                            </h5>
+                            <span id="trip-days-badge" class="badge bg-primary rounded-pill"
+                                th:text="${#lists.size(grupoViaje.itinerarios)} + ' días de viaje'">
+                            </span>
+                        </div>
+                                     
+                        <!-- Itinerarios -->
+                        <div th:each="itinerario, iterStat : *{itinerarios}" class="form-group mb-4">
+                            <!-- Campos ocultos para enviar el ID y el número de día de vuelta -->
+                            <input type="hidden" th:field="*{itinerarios[__${iterStat.index}__].idItinerario}">
+                            <input type="hidden" th:field="*{itinerarios[__${iterStat.index}__].diaNumero}">
+                            <h6 th:text="'Día ' + ${itinerario.diaNumero}"></h6>
+                            <div class="mb-3">
+                                <label class="form-label">Título del día<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control titulo-itinerario"
+                                    th:field="*{itinerarios[__${iterStat.index}__].titulo}" required>
+                                <div class="invalid-feedback">El título es obligatorio y no puede superar los 100
+                                    caracteres.</div>
+                            </div>
+                            <div>
+                                <label class="form-label">Descripción del día (opcional)</label>
+                                <textarea class="form-control" rows="2"
+                                    th:field="*{itinerarios[__${iterStat.index}__].descripcion}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones del formulario -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a th:href="@{/mis-viajes}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/editar-grupo.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <!-- Navbar -->
+    <nav th:fragment="navbar(activeTab)" class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <img th:src="@{/img/AddVenture_white.png}" alt="Logo AddVenture" width="36" height="36"
+                    class="rounded-circle mx-1">
+                <span> AddVenture </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activeTab == 'buscar-grupos' ? 'active' : ''}"
+                            th:href="@{/buscar-grupos}">Buscar Grupos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activeTab == 'mis-viajes' ? 'active' : ''}"
+                            th:href="@{/mis-viajes}">Mis Viajes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activeTab == 'crear-grupo' ? 'active' : ''}"
+                            th:href="@{/crear-grupo}">Crear Grupo</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <a th:href="@{/notificaciones}" class="position-relative text-white">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            2
+                        </span>
+                    </a>
+                    <div class="dropdown d-flex align-items-center gap-2">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- Si tiene foto de perfil, la mostramos -->
+                            <img th:if="${usuarioPrincipal != null and usuarioPrincipal.fotoPerfil != null and !usuarioPrincipal.fotoPerfil.isEmpty()}"
+                                th:src="@{'/uploads/' + ${usuarioPrincipal.fotoPerfil}}" class="rounded-circle"
+                                width="40" height="40" style="object-fit: cover;" alt="Perfil">
+
+                            <!-- Si no tiene foto, mostramos sus iniciales -->
+                            <div th:if="${usuarioPrincipal == null or usuarioPrincipal.fotoPerfil == null or usuarioPrincipal.fotoPerfil.isEmpty()}"
+                                class="avatar-circle bg-light text-primary fw-bold">
+                                <span
+                                    th:text="${#strings.substring(usuarioPrincipal.nombre,0,1)} + ${#strings.substring(usuarioPrincipal.apellido,0,1)}">US</span>
+                            </div>
+
+                            <!-- Texto al lado de la imagen -->
+                            <div class="d-none d-md-block text-white text-start ms-2">
+                                <small class="d-block">Hola,</small>
+                                <strong th:text="${usuarioPrincipal.nombre}">Nombre</strong>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu shadow" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/perfil}">
+                                    <i class="bi bi-person"></i> Mi Perfil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/configuracion}">
+                                    <i class="bi bi-gear"></i> Configuración
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/ayuda}">
+                                    <i class="bi bi-question-circle"></i> Ayuda
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit"
+                                        class="dropdown-item d-flex align-items-center gap-2 text-danger">
+                                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+
+</html>

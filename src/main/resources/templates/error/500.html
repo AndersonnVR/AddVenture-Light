@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es"
+    th:replace="~{fragments/layout :: layout(~{::title}, ~{::link}, 'error', ~{::main},~{::script})}">
+
+<head>
+    <title>AddVenture - 500|Error interno</title>
+    <link rel="stylesheet" th:href="@{/css/error_500.css}">
+</head>
+
+<body>
+    <main>
+        <div class="error-wrapper">
+            <div class="error-content">
+                <h1>500</h1>
+                <h2>Algo salió mal en el campamento base</h2>
+                <p>Ha ocurrido un problema inesperado en nuestro sistema. <br>
+                    Pero no te preocupes, ya estamos trabajando en ello.</p>
+                <a href="/" class="btn-home">
+                    <i class="bi bi-house-fill"></i> Volver al inicio
+                </a>
+            </div>
+            <div class="error-image"></div>
+        </div>
+    </main>
+    <script></script>
+</body>
+
+</html>

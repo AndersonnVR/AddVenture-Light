@@ -1,0 +1,339 @@
+.back-link {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    align-items: center;
+    color: #3b82f6;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: #2563eb;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid white;
+}
+
+.orange {
+    background-color: #f97316;
+}
+
+.badge-informacion {
+    z-index: 20;
+    position: relative;
+}
+
+.estado-overlay {
+    backdrop-filter: blur(0.1px);
+    background-color: rgba(0, 0, 0, 0.35);
+    z-index: 1;
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* ---------------------------------- */
+/*       SECCIÓN DE ANIMACIONES       */
+/* ---------------------------------- */
+
+/* --- Animación de Entrada (fadeInUp) --- */
+/* Definición para navegadores WebKit antiguos */
+@-webkit-keyframes fadeInUp {
+    from {
+        opacity: 0; /* Elemento invisible al inicio */
+        -webkit-transform: translateY(20px); /* Desplazamiento hacia abajo */
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1; /* Totalmente visible al final */
+        -webkit-transform: translateY(0); /* Posición original */
+        transform: translateY(0);
+    }
+}
+
+/* Definición estándar de la animación */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+/* --- Aplicación de la animación --- */
+.main-title-container .main-title-content,
+.row-cards-container > .trip-card {
+    opacity: 0; /* Ocultos inicialmente para que la animación tenga efecto */
+    -webkit-animation: fadeInUp 0.7s ease-out forwards;
+    animation: fadeInUp 0.7s ease-out forwards;
+}
+/* --- Retraso específico para las cards impares y pares --- */
+.row-cards-container > .trip-card:nth-child(odd) {
+    -webkit-animation-delay: 0.6s;
+    animation-delay: 0.6s;
+}
+.row-cards-container > .trip-card:nth-child(even) {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+}
+
+/* --- Estilos base para las cards --- */
+.custom-card {
+    overflow: hidden;
+    cursor: pointer;
+    /* Transición suave en todos los cambios de propiedades animables */
+    -webkit-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -moz-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -o-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Sombra para dar profundidad inicial a la tarjeta */
+    -webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    -moz-box-shadow:    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow:         0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Efecto hover sobre la card --- */
+.custom-card:hover {
+    /* Eleva la tarjeta y la escala ligeramente para resaltar la interacción */
+    -webkit-transform: translateY(-8px) scale(1.005);
+    -moz-transform: translateY(-8px) scale(1.005);
+    -o-transform: translateY(-8px) scale(1.005);
+    transform: translateY(-8px) scale(1.005);
+
+    /* Aumenta la sombra para dar más profundidad */
+    -webkit-box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 
+                        0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow:    0 20px 25px -5px rgba(0, 0, 0, 0.15), 
+                        0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    box-shadow:         0 20px 25px -5px rgba(0, 0, 0, 0.15), 
+                        0 10px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Contenedor de la imagen de la card --- */
+.card-img-top-container {
+    overflow: hidden; /* Impide que el zoom de la imagen sobresalga */
+    position: relative;
+}
+
+/* --- Imagen de la card --- */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+    transform-origin: center center; /* Escalado desde el centro */
+}
+
+/* --- Efecto hover: zoom suave sobre la imagen --- */
+.custom-card:hover .card-img-top {
+    transform: scale(1.08);
+}
+
+/* --- Estilos base para los botones --- */
+.btn {
+    position: relative; /* Posicionamiento relativo para el efecto de fondo */
+    overflow: hidden; /* Impide que el efecto de fondo se desborde */
+    /* Transición suave en todos los cambios de propiedades animables */
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+/* --- Efecto de brillo animado que se muestra al hacer hover sobre el botón --- */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    -webkit-transition: left 0.5s;
+    -moz-transition: left 0.5s;
+    -o-transition: left 0.5s;
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* --- Efecto hover sobre el botón de crear grupo --- */
+.btn-create-group:hover {
+    /* Eleva el botón ligeramente para resaltar la interacción */
+    -webkit-transform: translateY(-2px);
+    -moz-transform: translateY(-2px);
+    -o-transform: translateY(-2px);
+    transform: translateY(-2px);
+
+    /* Aumenta la sombra para dar más profundidad */
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Gradiente animado para el botón de crear grupo --- */
+.btn-create-group {
+    background: linear-gradient(135deg, #40e0d0 0%, #1e90ff 50%, #0047ab 100%);
+    border: none;
+}
+
+.btn-create-group:hover {
+    background: linear-gradient(135deg, #20b2aa 0%, #1873cc 50%, #003580 100%);
+}
+
+/* --- Gradiente animado para el botón de detalles --- */
+.btn-details {
+    background: linear-gradient(135deg, #64748b 0%, #475569 50%, #1e293b 100%);
+    border: none;
+}
+
+.btn-details:hover {
+    background: linear-gradient(135deg, #556270 0%, #3e4959 50%, #182433 100%);
+}
+
+/* --- Efecto de brillo animado en el título --- */
+/* Definición para navegadores WebKit antiguos */
+@-webkit-keyframes shimmer {
+    /* Inicia y termina con el fondo desplazado hacia la izquierda */
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    /* A mitad del ciclo, el fondo se desplaza hacia la derecha */
+    50% {
+        background-position: 100% 50%;
+    }
+}
+/* Definición estándar de la animación */
+@keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* --- Aplicación de la animación --- */
+.card-title {
+    /* Fondo degradado para el texto */
+    background: linear-gradient(45deg, #182433, #556270, #182433);
+    /* Aumenta el tamaño del fondo para que se pueda mover con la animación */
+    background-size: 200% 200%;
+    /* Solo el texto muestra el fondo */
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* El texto es transparente para que se vea el fondo */
+    -webkit-text-fill-color: transparent;
+    /* Asigna la animación con movimiento infinito */
+    -webkit-animation: shimmer 3s ease-in-out infinite;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+.nav-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--primary);
+    background-color: transparent;
+    border-bottom: 2px solid var(--primary);
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* Estilos base para los botones */
+.buttons-container {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-create-group {
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* XS - Botones apilados verticalmente y centrados */
+@media (max-width: 575.98px) {
+    .main-title-content {
+        text-align: center;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .btn-create-group {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* SM y MD - Botones en fila, cada uno ocupa la mitad del ancho */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .main-title-content {
+        text-align: start;
+    }
+    
+    .buttons-container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .btn-create-group {
+        flex: 1;
+        max-width: calc(50% - 6px);
+    }
+}
+
+/* LG y superiores - Botones lado a lado con el texto */
+@media (min-width: 992px) {
+    .main-title-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .buttons-container {
+        flex-direction: row;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+    
+    .btn-create-group {
+        flex: none;
+        white-space: nowrap;
+    }
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es"
+    th:replace="~{fragments/layout :: layout(~{::title}, ~{::link}, 'error', ~{::main},~{::script})}">
+
+<head>
+    <title>AddVenture - 404|Te saliste del mapa</title>
+    <link rel="stylesheet" th:href="@{/css/error_404.css}">
+</head>
+
+<body>
+    <main>
+        <div class="error-wrapper">
+            <div class="error-content">
+                <h1>404</h1>
+                <h2>Te saliste del mapa</h2>
+                <p>La página que buscas no existe o fue movida. <br> Pero no te preocupes, nuevas aventuras te esperan.
+                </p>
+                <a href="/" class="btn-home">
+                    <i class="bi bi-compass-fill"></i> Volver al inicio
+                </a>
+            </div>
+            <div class="error-image"></div>
+        </div>
+    </main>
+    <script></script>
+</body>
+
+</html>

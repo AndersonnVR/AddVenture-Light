@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/layout :: layout(~{::title}, ~{::link}, 'perfil', ~{::main}, ~{::script})}">
+
+<head>
+    <title>AddVenture - Mi Perfil</title>
+    <link rel="stylesheet" th:href="@{/css/perfil.css}">
+</head>
+
+<body>
+    <main>
+        <!-- Información General -->
+        <div class="container p-5">
+            <!-- Información del Usuario -->
+            <div class="card shadow-sm p-4 mb-5">
+                <div class="row g-4 align-items-center">
+                    <!-- Foto de perfil -->
+                    <div class="col-md-4 text-center">
+                        <img th:src="@{'/uploads/' + ${usuario.fotoPerfil}}" class="rounded-circle border-user"
+                            width="180" height="180" style="object-fit: cover;" alt="Foto de perfil" />
+                        <h4 class="mt-3 mb-2">
+                            <span th:text="${usuario.nombre}">Nombre</span>
+                            <span th:text="${usuario.apellido}">Apellido</span>
+                            <i class="bi bi-patch-check-fill verified-badge" title="Usuario Verificado"></i>
+                        </h4>
+                        <p class="text-muted" th:text="${usuario.descripcion}"></p>
+                    </div>
+
+                    <!-- Datos personales -->
+                    <div class="col-md-8">
+                        <div class="row g-3">
+                            <div class="col-sm-6 d-flex align-items-center">
+                                <i class="bi bi-person-circle text-primary fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted">Usuario</small><br>
+                                    <strong th:text="'@' + ${usuario.nombreUsuario}">@usuario</strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 d-flex align-items-center">
+                                <i class="bi bi-envelope-fill text-primary fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted">Correo</small><br>
+                                    <strong th:text="${usuario.correo}">correo@ejemplo.com</strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 d-flex align-items-center">
+                                <i class="bi bi-geo-alt-fill text-primary fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted">Ubicación</small><br>
+                                    <strong th:text="${usuario.ciudad} + ', ' + ${usuario.pais}">Ciudad, País</strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 d-flex align-items-center">
+                                <i class="bi bi-cake2-fill text-primary fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted">Nacimiento</small><br>
+                                    <strong th:text="${#temporals.format(usuario.fechaNacimiento, 'dd/MM/yyyy')}">01/01/2000</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Logros -->
+            <h4 class="mb-3">Logros</h4>
+
+            <!-- Mensaje cuando no hay logros -->
+            <div th:if="${logros.empty}">
+                <div class="alert alert-info text-center" role="alert">
+                    <i class="bi bi-award me-2"></i>
+                    Aún no has desbloqueado ningún logro. <br>
+                    Viaja, explora y participa para empezar a coleccionarlos. 🏅🌍<br>
+                    ¡Cada experiencia te acerca a un nuevo reconocimiento!
+                </div>
+            </div>
+
+            <div class="row mb-4" th:if="${!logros.empty}">
+                <div class="col-md-4 my-2" th:each="logro:${logros}">
+                    <div class="achievement-card bg-white shadow-sm">
+                        <img th:src="@{/img/{archivo}(archivo=${logro.imagenUrl})}" alt="Logros" class="img-logros">
+                        <h5 th:text="${logro.nombre}"></h5>
+                        <p th:text="${logro.descripcion}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pasaporte digital -->
+            <h4 class="mb-3">Pasaporte Digital</h4>
+            <!-- Mensaje cuando no hay pasaportes -->
+            <div th:if="${pasaportes.empty}">
+                <div class="alert alert-info text-center" role="alert">
+                    <i class="bi bi-geo-alt-fill me-2"></i>
+                    Aún no tienes pasaportes digitales. <br>
+                    Tus pasaportes aparecerán aquí cuando completes tu primer viaje. 🌍✈️<br>
+                    <a th:href="@{/buscar-grupos}" class="btn btn-outline-primary mt-3">
+                        Explorar grupos de viaje
+                    </a>
+                </div>
+            </div>
+            <!-- Pasaportes obtenidos -->
+            <div th:if="${!pasaportes.empty}" class="mb-4 d-flex flex-wrap gap-3 justify-content-center">
+                <div th:each="pasaporte : ${pasaportes}" class="passport-stamp-styled text-success text-center">
+                    <div>
+                        <i class="bi bi-geo-alt me-1"></i>
+                        <span th:text="${pasaporte.destinoPrincipal}">Destino</span>
+                    </div>
+                    <div class="small mt-1 text-muted">
+                        <i class="bi bi-calendar-check me-1"></i>
+                        <span th:text="${#temporals.format(pasaporte.fechaFin, 'dd MMM yyyy')}">01 Jul 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opiniones -->
+            <h4 class="mb-3">Opiniones</h4>
+
+            <!-- Mensaje cuando no hay opiniones -->
+            <div th:if="${opiniones.empty}">
+                <div class="alert alert-info text-center" role="alert">
+                    <i class="bi bi-chat-left-text me-2"></i>
+                    Aún no has recibido opiniones. <br>
+                    Alguien dejará su opinión sobre ti cuando compartan un viaje juntos. 😊<br>
+                    <a th:href="@{/buscar-grupos}" class="btn btn-outline-primary mt-3">
+                        Participar en un viaje
+                    </a>
+                </div>
+            </div>
+
+            <div class="row g-3" th:if="${!opiniones.empty}">
+                <div class="col-md-4" th:each="opinion : ${opiniones}">
+                    <div class="card mb-4 shadow-sm h-100">
+                        <div class="card-body">
+                            <!-- Autor y Fecha -->
+                            <div class="d-flex align-items-center mb-3">
+                                <img th:src="@{/img/{img}(img=${opinion.autor.fotoPerfil})}" class="rounded-circle me-3"
+                                    alt="Foto del autor" style="width: 50px; height: 50px; object-fit: cover;">
+                                <div>
+                                    <strong th:text="${opinion.autor.nombre}">Nombre del autor</strong><br>
+                                    <small class="text-muted" th:text="${opinion.fecha}">Fecha</small>
+                                </div>
+                            </div>
+
+                            <!-- Texto de la opinión -->
+                            <p th:text="${opinion.descripcion}" class="mb-3">Descripción</p>
+
+                            <!-- Estrellas -->
+                            <div>
+                                <img th:src="@{/img/{img}(img=${opinion.imagenEstrellas})}" alt="Calificación" style="height: 80px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mb-3 pt-4">Próximos Viajes</h4>
+
+            <!-- Mensaje cuando no hay viajes activos -->
+            <div th:if="${proximosViajes.empty}">
+                <div class="alert alert-info text-center" role="alert">
+                    <i class="bi bi-calendar-x me-2"></i>
+                    No tienes próximos viajes planificados. <br>
+                    Aquí verás los viajes que estás por comenzar, ya sea como creador o participante. ⏳✈️<br>
+                    ¡Es un buen momento para planear tu próxima aventura!<br>
+                    <a th:href="@{/buscar-grupos}" class="btn btn-outline-primary mt-3">
+                        Explorar grupos de viaje
+                    </a>
+                </div>
+            </div>
+
+            <div class="row" th:if="${!proximosViajes.empty}">
+                <div class="col-lg-6 mb-4" th:each="viaje : ${proximosViajes}">
+                    <div class="card shadow-sm border-0 h-100 d-flex flex-row">
+                        <!-- Imagen del viaje -->
+                        <div style="flex-shrink: 0; width: 180px; height: auto;">
+                            <img th:src="${viaje.imagenDestacada}" alt="Imagen del viaje" class="rounded-start"
+                                style="width: 180px; height: 100%; object-fit: cover;" />
+                        </div>
+
+                        <!-- Detalles del viaje -->
+                        <div class="card-body d-flex flex-column justify-content-between flex-grow-1">
+                            <div>
+                                <!-- Título y destino -->
+                                <div class="d-flex justify-content-between align-items-start flex-wrap">
+                                    <h5 class="mb-1" th:text="${viaje.nombreViaje}">Nombre del Viaje</h5>
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-geo-alt me-1"></i>
+                                        <span th:text="${viaje.destinoPrincipal}">Destino</span>
+                                    </span>
+                                </div>
+
+                                <!-- Fechas -->
+                                <div class="d-flex align-items-center text-muted mb-2 mt-2 small">
+                                    <i class="bi bi-calendar3 text-primary me-2"></i>
+                                    <span>
+                                        <strong>Inicio:</strong> <span
+                                            th:text="${#temporals.format(viaje.fechaInicio, 'dd/MM/yyyy')}"></span>
+                                        &nbsp;•&nbsp;
+                                        <strong>Fin:</strong> <span
+                                            th:text="${#temporals.format(viaje.fechaFin, 'dd/MM/yyyy')}"></span>
+                                    </span>
+                                </div>
+
+                                <!-- Descripción -->
+                                <p class="text-truncate-3" th:text="${viaje.descripcion}">Breve descripción del viaje...
+                                </p>
+                            </div>
+
+                            <!-- Participantes y acción -->
+                            <div class="d-flex align-items-center justify-content-between mt-3">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2 small text-muted">Participantes:</span>
+                                    <div>
+                                        <img th:each="p : ${viaje.participantes}"
+                                            th:src="@{/uploads/{img}(img=${p.usuario.fotoPerfil})}"
+                                            class="rounded-circle border me-1" width="36" height="36"
+                                            style="object-fit: cover;" th:alt="${p.usuario.nombre}" />
+                                    </div>
+                                </div>
+
+                                <a th:href="@{/mis-viajes/{id}(id=${viaje.idGrupo})}" class="btn btn-sm btn-outline-primary">
+                                    Ver detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <script></script>
+</body>
+
+</html>

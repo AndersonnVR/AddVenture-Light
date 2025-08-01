@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <!-- Navbar -->
+    <nav th:fragment="navbar(activeTab)" class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <img th:src="@{/img/AddVenture_white.png}" alt="Logo AddVenture" width="36" height="36"
+                    class="rounded-circle mx-1">
+                <span>AddVenture</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#como-funciona">Cómo Funciona</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#destinos">Destinos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonios">Testimonios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/buscar-grupos}">Buscar Grupos</a>
+                    </li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a th:href="@{/registro}" class="btn btn-light">Crear Cuenta</a>
+                    <a th:href="@{/login}" class="btn btn-outline-light d-flex align-items-center">
+                        <span class="me-2">Iniciar Sesión</span>
+                        <i class="fas fa-sign-in-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+
+</html>

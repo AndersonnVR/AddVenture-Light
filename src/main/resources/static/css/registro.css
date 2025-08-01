@@ -1,0 +1,219 @@
+:root {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --light-blue: #eff6ff;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+}
+
+body {
+    background: linear-gradient(to bottom, var(--light-blue), #f9fafb);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    color: var(--primary-color);
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.logo-text {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.card {
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-color: #dbeafe;
+}
+
+.card-header {
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(59, 130, 246, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0;
+    /* distribuye el espacio equitativamente */
+    min-width: 80px;
+    /* ancho mínimo para evitar colapso en pantallas chicas */
+}
+
+.step-circle {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.step.active .step-circle {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.step.completed .step-circle {
+    background-color: var(--green);
+    color: white;
+}
+
+.step-text {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.step.active .step-text {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.step.completed .step-text {
+    color: var(--green);
+    font-weight: 500;
+}
+
+.verification-code {
+    letter-spacing: 0.5em;
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+.username-input {
+    position: relative;
+}
+
+.username-status {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.alert-info-custom {
+    background-color: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
+}
+
+.alert-success-custom {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.country-code {
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 0.375rem 0.75rem;
+}
+
+.phone-input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.completion-icon {
+    width: 4rem;
+    height: 4rem;
+    background-color: #d1fae5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.completion-icon i {
+    color: var(--green);
+    font-size: 2rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.benefit-item i {
+    color: var(--green);
+}
+
+.position-relative {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+}

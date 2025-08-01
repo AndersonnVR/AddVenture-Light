@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, styles, activeTab, content, scripts)">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">AddVenture</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Estilos propios base -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/img/AddVenture_white.png}">
+
+    <!-- Fragmento para estilos específicos de la página -->
+    <th:block th:replace="${styles}"></th:block>
+</head>
+
+<body>
+    <!-- Fragmento para la barra de navegación -->
+    <div th:replace="~{fragments/navbar :: navbar(${activeTab})}"></div>
+
+    <!-- Fragmento para el contenido de la página -->
+    <div th:replace="${content}"></div>
+
+    <!-- Fragmento para el pie de página -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Fragmento para scripts específicos de la página -->
+    <th:block th:replace="${scripts}"></th:block>
+</body>
+
+</html>

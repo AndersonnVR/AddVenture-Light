@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/layout-index :: layout(~{::title}, ~{::link}, 'index', ~{::main}, ~{::script})}">
+
+<head>
+    <title>AddVenture - Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+
+<body>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <img th:src="@{/img/img02.jpg}" alt="Personas disfrutando de un viaje en montaña"
+                class="w-100 h-100 position-absolute object-fit-cover">
+            <div class="hero-content">
+                <span class="hero-badge">¡Nuevo! Grupos verificados</span>
+                <h1 class="display-4 fw-bold mb-4">Viajar es mejor en compañía</h1>
+                <p class="lead mb-4">Encuentra personas que comparten tu pasión por explorar el mundo. Únete a grupos de
+                    viaje o crea el tuyo propio.</p>
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                    <a th:href="@{/buscar-grupos}" class="btn btn-primary btn-lg">Explorar Grupos</a>
+                    <a href="#como-funciona" class="btn btn-outline-light btn-lg">Ver Cómo Funciona</a>
+                </div>
+                <div class="mt-4 d-flex justify-content-center gap-3">
+                    <a href="#" class="btn btn-sm text-white opacity-75 hover-opacity-100">
+                        <i class="fab fa-instagram me-2"></i> Instagram
+                    </a>
+                    <a href="#" class="btn btn-sm text-white opacity-75 hover-opacity-100">
+                        <i class="fab fa-facebook me-2"></i> Facebook
+                    </a>
+                    <a href="#" class="btn btn-sm text-white opacity-75 hover-opacity-100">
+                        <i class="fab fa-twitter me-2"></i> Twitter
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it Works Section -->
+        <section id="como-funciona" class="steps-section">
+            <div class="container">
+                <div class="text-center mb-5 fade-in">
+                    <h2 class="display-6 fw-bold mb-3">¿Cómo funciona AddVenture?</h2>
+                    <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                        Organizar un viaje en grupo nunca fue tan fácil.<br>
+                        Sigue estos simples pasos y vive tu próxima aventura acompañado.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3 fade-in" data-delay="200">
+                        <div class="step-card bg-blue-50 border border-blue-200 text-center h-100">
+                            <div class="step-icon bg-blue-600">
+                                <i class="fas fa-search fa-2x"></i>
+                            </div>
+                            <h3 class="h5 text-primary mb-1">PASO 1</h3>
+                            <h4 class="h5 mb-3">Explora Grupos</h4>
+                            <p class="text-muted">Descubre grupos de viaje creados por otros aventureros según tu
+                                destino o
+                                intereses.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 fade-in" data-delay="400">
+                        <div class="step-card bg-green-50 border border-green-200 text-center h-100">
+                            <div class="step-icon bg-green-600">
+                                <i class="fas fa-edit fa-2x"></i>
+                            </div>
+                            <h3 class="h5 text-success mb-1">PASO 2</h3>
+                            <h4 class="h5 mb-3">Crea tu Propio Grupo</h4>
+                            <p class="text-muted">¿No encuentras el grupo ideal? ¡Crea uno y encuentra compañeros de
+                                ruta
+                                afines!</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 fade-in" data-delay="600">
+                        <div class="step-card bg-purple-50 border border-purple-200 text-center h-100">
+                            <div class="step-icon bg-purple-600">
+                                <i class="fas fa-comments fa-2x"></i>
+                            </div>
+                            <h3 class="h5 text-purple mb-1">PASO 3</h3>
+                            <h4 class="h5 mb-3">Conecta con Viajeros</h4>
+                            <p class="text-muted">Chatea, comparte ideas, resuelve dudas y organiza tu viaje en
+                                conjunto.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 fade-in" data-delay="800">
+                        <div class="step-card bg-orange-50 border border-orange-200 text-center h-100">
+                            <div class="step-icon bg-orange-600">
+                                <i class="fas fa-plane fa-2x"></i>
+                            </div>
+                            <h3 class="h5 text-orange mb-1">PASO 4</h3>
+                            <h4 class="h5 mb-3">¡Vámonos de Aventura!</h4>
+                            <p class="text-muted">Prepara tus maletas y disfruta la experiencia con tu nuevo grupo de
+                                viajeros.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="achievements-section">
+            <div class="container">
+                <div class="text-center mb-5 fade-in">
+                    <h2 class="display-6 fw-bold text-primary mb-3">Desbloquea logros mientras viajas</h2>
+                    <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                        Conviértete en un viajero Pro y gana insignias por tus experiencias.
+                    </p>
+                </div>
+
+                <div class="row g-4 justify-content-center" style="max-width: 1000px; margin: 0 auto;">
+                    <div class="col-6 col-md-3 fade-in" data-delay="200">
+                        <div class="achievement-card text-center">
+                            <div class="achievement-icon bg-warning">
+                                <i class="fas fa-flag fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-2">Pioneer</h3>
+                            <p class="small text-muted">Completa tu primer viaje usando AddVenture.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 fade-in" data-delay="400">
+                        <div class="achievement-card text-center">
+                            <div class="achievement-icon bg-info">
+                                <i class="fas fa-compass fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-2">Pathfinder</h3>
+                            <p class="small text-muted">Crea y lidera un grupo de viaje exitoso.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 fade-in" data-delay="600">
+                        <div class="achievement-card text-center">
+                            <div class="achievement-icon bg-warning">
+                                <i class="fas fa-award fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-2">Verificado</h3>
+                            <p class="small text-muted">Sube al siguiente nivel y completa la verificación avanzada.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 fade-in" data-delay="800">
+                        <div class="achievement-card text-center">
+                            <div class="achievement-icon bg-success">
+                                <i class="fas fa-map-marker-alt fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-2">Nómada</h3>
+                            <p class="small text-muted">Viaja a 5 o más países diferentes de latinoamérica.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <a href="#" class="btn btn-primary">Ver todos los logros</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Destinations Section -->
+        <section id="destinos" class="destinations-section">
+            <div class="container">
+                <div class="text-center mb-5 fade-in">
+                    <h2 class="display-6 fw-bold mb-3">Destinos en Tendencia</h2>
+                    <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                        Inspírate y únete a los grupos más populares para explorar nuevos lugares.
+                    </p>
+                </div>
+
+                <div class="card p-4 mb-4 fade-in">
+                    <div class="destination-carousel position-relative">
+                        <div class="carousel-control prev">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+
+                        <div class="carousel-container">
+                            <!-- Destinations will be added dynamically with JavaScript -->
+                        </div>
+
+                        <div class="carousel-control next">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="carousel-indicators mt-3">
+                        <!-- Indicators will be added dynamically with JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="row text-center g-4">
+                    <div class="col-6 col-md-3">
+                        <div class="h1 fw-bold mb-1">10,000+</div>
+                        <div class="text-blue-100">Viajeros activos</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="h1 fw-bold mb-1">1,500+</div>
+                        <div class="text-blue-100">Grupos creados</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="h1 fw-bold mb-1">25+</div>
+                        <div class="text-blue-100">Países explorados</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="h1 fw-bold mb-1">98%</div>
+                        <div class="text-blue-100">Viajeros satisfechos</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonios" class="py-5 bg-gradient-to-b from-blue-50 to-white">
+            <div class="container py-4">
+                <div class="text-center mb-5 fade-in">
+                    <h2 class="display-6 fw-bold mb-3">Testimonios de nuestros viajeros</h2>
+                    <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                        Conecta con experiencias reales de quienes ya vivieron la aventura.<br>
+                        Descubre cómo AddVenture ayudó a miles a explorar Latinoamérica en grupo y de forma auténtica.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4 fade-in" data-delay="200">
+                        <div class="testimonial-card bg-blue-50 border border-blue-100 h-100">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="testimonial-avatar me-3">
+                                    <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Mariana López"
+                                        class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 text-primary">Mariana López</h5>
+                                    <p class="small text-muted mb-0">Desde Lima, Perú</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded mb-3 border">
+                                <p class="fst-italic text-muted">
+                                    "Gracias a AddVenture encontré mi grupo ideal para recorrer Colombia. Todo fue
+                                    fácil,
+                                    seguro y muy divertido. ¡Hice amigos para toda la vida!"
+                                </p>
+                            </div>
+                            <div class="text-center text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 fade-in" data-delay="400">
+                        <div class="testimonial-card bg-green-50 border border-green-100 h-100">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="testimonial-avatar me-3">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Méndez"
+                                        class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 text-success">Carlos Méndez</h5>
+                                    <p class="small text-muted mb-0">Desde Ciudad de México, México</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded mb-3 border">
+                                <p class="fst-italic text-muted">
+                                    "Me uní a un grupo para explorar la Patagonia y fue una de las mejores decisiones.
+                                    Todo
+                                    el viaje fue colaborativo y sin complicaciones."
+                                </p>
+                            </div>
+                            <div class="text-center text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 fade-in" data-delay="600">
+                        <div class="testimonial-card bg-purple-50 border border-purple-100 h-100">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="testimonial-avatar me-3">
+                                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Juliana Pereira"
+                                        class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 text-purple">Juliana Pereira</h5>
+                                    <p class="small text-muted mb-0">Desde Medellín, Colombia</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded mb-3 border">
+                                <p class="fst-italic text-muted">
+                                    "Lo que más me gustó fue lo personalizable que se siente la experiencia. Me encanta
+                                    cómo
+                                    puedo filtrar viajes según mi estilo."
+                                </p>
+                            </div>
+                            <div class="text-center text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Section -->
+        <section class="security-section">
+            <div class="container">
+                <div class="text-center mb-5 fade-in">
+                    <h2 class="display-6 fw-bold mb-3">Tu seguridad es nuestra prioridad</h2>
+                    <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                        En AddVenture creemos que una buena experiencia comienza con la confianza. Por eso, cada viajero
+                        pasa por un proceso de verificación antes de integrarse a un grupo.
+                    </p>
+                </div>
+
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-4 fade-in" data-delay="200">
+                        <div class="text-center bg-white p-4 rounded-lg shadow-sm h-100">
+                            <div class="security-icon bg-blue-500 mb-3">
+                                <i class="fas fa-envelope fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-2">Email verificado</h3>
+                            <p class="text-muted">Todos los viajeros confirman su correo. Aquí no hay usuarios fantasma.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 fade-in" data-delay="400">
+                        <div class="text-center bg-white p-4 rounded-lg shadow-sm h-100">
+                            <div class="security-icon bg-green-500 mb-3">
+                                <i class="fas fa-mobile-alt fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-2">Teléfono validado</h3>
+                            <p class="text-muted">Un número real detrás de cada perfil. Más transparencia, más
+                                confianza.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 fade-in" data-delay="600">
+                        <div class="text-center bg-white p-4 rounded-lg shadow-sm h-100">
+                            <div class="security-icon bg-yellow-500 mb-3">
+                                <i class="fas fa-star fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-2">Reputación del viajero</h3>
+                            <p class="text-muted">Las mejores experiencias vienen con buenas calificaciones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <img th:src="@{/img/aventurero.jpg}" alt="Persona mirando montañas"
+                class="w-100 h-100 position-absolute object-fit-cover">
+            <div class="cta-content fade-in">
+                <h2 class="display-5 fw-bold mb-3">¿Listo para tu próxima aventura?</h2>
+                <p class="lead mb-4">
+                    Miles ya están viajando en grupo gracias a AddVenture.<br>
+                    Ahora te toca a ti vivir una experiencia única.
+                </p>
+                <a th:href="@{/registro}" class="btn btn-light btn-lg px-5">Empezar ahora</a>
+            </div>
+        </section>
+    </main>
+
+    <script th:src="@{/js/index.js}"></script>
+</body>
+
+</html>

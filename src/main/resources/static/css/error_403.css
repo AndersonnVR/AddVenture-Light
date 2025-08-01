@@ -1,0 +1,92 @@
+:root {
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-border: #bfdbfe;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    color: #1a1a1a;
+}
+
+.error-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100vh;
+}
+
+.error-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+}
+
+.error-content h1 {
+    font-size: 7rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+}
+
+.error-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.error-content p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-home:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-home i {
+    margin-right: 0.5rem;
+}
+
+.error-image {
+    background: url('../img/error_403.jpg') no-repeat center;
+    background-size: cover;
+}
+
+@media (max-width: 768px) {
+    .error-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .error-image {
+        height: 40vh;
+    }
+
+    .error-content {
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .error-content h1 {
+        font-size: 5rem;
+    }
+}

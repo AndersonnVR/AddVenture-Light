@@ -1,0 +1,6 @@
+2025-07-24 00:14:16 - INFO - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-07-24 00:14:16 - INFO - c.a.AddVenture.AddVentureApplication - Starting AddVentureApplication using Java 17.0.12 with PID 19200 (C:\Users\JOSLUY\Downloads\AddVenture - VF1.0\AddVenture Light - Versión Final\target\classes started by JOSLUY in C:\Users\JOSLUY\Downloads\AddVenture - VF1.0\AddVenture Light - Versión Final)
+2025-07-24 00:14:16 - DEBUG - c.a.AddVenture.AddVentureApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-07-24 00:14:16 - INFO - c.a.AddVenture.AddVentureApplication - No active profile set, falling back to 1 default profile: "default"
+2025-07-24 00:14:16 - INFO - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-07-24 00:14:16 - INFO - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
