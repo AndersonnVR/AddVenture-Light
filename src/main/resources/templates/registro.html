@@ -127,7 +127,7 @@
                                 <label class="form-label">
                                     <i class="fa-regular fa-envelope me-2"></i>Email
                                 </label>
-                                <input type="email" th:field="*{correo}" class="form-control"
+                                <input id="emailInput" type="email" th:field="*{correo}" class="form-control"
                                     th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid' : ''"
                                     placeholder="tu@email.com">
                                 <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('correo')}"
@@ -185,6 +185,7 @@
     </main>
 
     <script th:src="@{/js/registro.js}"></script>
+    <script th:src="@{/js/verificar.js}"></script>
 
 </body>
 
