@@ -12,7 +12,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data //Genera Automaticamente los Getters and Setters
 //Esta clase representa el DTO (Data Transfer Object) para el registro de un usuario.
 @ContraseniasIguales
 public class RegistroUsuarioDTO {
@@ -52,96 +54,4 @@ public class RegistroUsuarioDTO {
     private String descripcion;
 
     private MultipartFile fotoPerfil;
-
-
-    // Getters y setters
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getContrasenia() {
-        return contrasenia;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
-    }
-
-    public String getConfirmarContrasenia() {
-        return confirmarContrasenia;
-    }
-
-    public void setConfirmarContrasenia(String confirmarContrasenia) {
-        this.confirmarContrasenia = confirmarContrasenia;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public MultipartFile getFotoPerfil() {
-        return fotoPerfil;
-    }
-
-    public void setFotoPerfil(MultipartFile fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
-    }
-    
 }

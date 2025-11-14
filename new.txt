@@ -1,0 +1,155 @@
+spring:
+  mail:
+    host: smtp.gmail.com          # o smtp.sendgrid.net / smtp.mailgun.org
+    port: 587
+    username: ${MAIL_USERNAME}    # usar variables de entorno
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+# Opcional: configuración Redis (si la activas)
+spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+
+app:
+  verification:
+    code-length: 6
+    ttl-minutes: 10
+    from-address: "no-reply@tu-dominio.com"
+    # limitar envíos a 5 por hora por email
+    max-sends-per-hour: 5
+
+
+
+=================================================
+package com.example.ratelimit;
+
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Service
+public class RateLimiterService {
+
+    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    private final int maxSendsPerHour;
+
+    public RateLimiterService(@Value("${app.verification.max-sends-per-hour:5}") int maxSendsPerHour) {
+        this.maxSendsPerHour = maxSendsPerHour;
+    }
+
+    private Bucket newBucket() {
+        Refill refill = Refill.intervally(maxSendsPerHour, Duration.ofHours(1));
+        Bandwidth limit = Bandwidth.classic(maxSendsPerHour, refill);
+        return Bucket.builder().addLimit(limit).build();
+    }
+
+    public boolean tryConsume(String email) {
+        Bucket bucket = buckets.computeIfAbsent(email.toLowerCase(), k -> newBucket());
+        return bucket.tryConsume(1);
+    }
+}
+================================================
+package com.example.controller;
+
+import com.example.email.EmailService;
+import com.example.ratelimit.RateLimiterService;
+import com.example.verification.VerificationService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    private final EmailService emailService;
+    private final VerificationService verificationService;
+    private final RateLimiterService rateLimiter;
+
+    public AuthController(EmailService emailService, VerificationService verificationService, RateLimiterService rateLimiter) {
+        this.emailService = emailService;
+        this.verificationService = verificationService;
+        this.rateLimiter = rateLimiter;
+    }
+
+    public static record SendCodeRequest(@NotBlank @Email String email) {}
+    public static record VerifyCodeRequest(@NotBlank @Email String email, @NotBlank String code) {}
+
+    @PostMapping("/send-code")
+    public ResponseEntity<?> sendCode(@Valid @RequestBody SendCodeRequest req) {
+        String email = req.email().toLowerCase();
+        // Rate limiting
+        if (!rateLimiter.tryConsume(email)) {
+            return ResponseEntity.status(429).body(Map.of("message", "Demasiadas solicitudes. Intenta más tarde."));
+        }
+        // Generar y enviar
+        String code = verificationService.generateAndStoreCode(email);
+        // NO devolver el código en la respuesta
+        emailService.sendVerificationCode(email, code, 10);
+        return ResponseEntity.ok(Map.of("message", "Código enviado si el correo existe"));
+    }
+
+    @PostMapping("/verify-code")
+    public ResponseEntity<?> verifyCode(@Valid @RequestBody VerifyCodeRequest req) {
+        boolean ok = verificationService.verifyCode(req.email().toLowerCase(), req.code());
+        if (ok) {
+            return ResponseEntity.ok(Map.of("verified", true));
+        } else {
+            return ResponseEntity.status(400).body(Map.of("verified", false, "message", "Código inválido o expirado"));
+        }
+    }
+}
+=================================================
+package com.example.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> onValidationError(MethodArgumentNotValidException ex) {
+        var messages = ex.getBindingResult().getFieldErrors()
+                         .stream()
+                         .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                         .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                java.util.Map.of("errors", messages)
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> onAny(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                java.util.Map.of("message", "Error interno", "detail", ex.getMessage())
+        );
+    }
+}
+=================================================

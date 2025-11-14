@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>Código de verificación</title>
+  </head>
+  <body>
+    <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto;">
+      <h2>Tu código de verificación</h2>
+      <p>Hola,</p>
+      <p>Hemos recibido una solicitud para verificar tu cuenta. Usa el siguiente código:</p>
+
+      <div style="font-size:28px; font-weight:bold; margin:20px 0;">
+        <span th:text="${code}">123456</span>
+      </div>
+
+      <p>Este código expira en <span th:text="${ttlMinutes}">10</span> minutos.</p>
+
+      <p>Si no solicitaste esto, ignora este correo.</p>
+      <hr/>
+      <small>© Tu App</small>
+    </div>
+  </body>
+</html>
