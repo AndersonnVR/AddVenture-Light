@@ -133,7 +133,7 @@ public class RegistroController {
         // Se envía un mensaje Flash para mostrar después de la redirección
         redirectAttributes.addFlashAttribute("mensaje", "Usuario registrado correctamente");
 
-        // Redirige al login para que el usuario pueda iniciar sesión
-        return "redirect:/login";
+        // Redirige al ingresar-code para validar codigo
+        return "redirect:/ingresar-code";
     }
 }

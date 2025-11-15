@@ -1,0 +1,71 @@
+body {
+  background: linear-gradient(to bottom right, #a8dadc, #457b9d);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.card img {
+  width: 60px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  color: #1d3557;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: #333;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.btn-verificar {
+  background-color: #457b9d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-verificar:hover {
+  background-color: #1d3557;
+}
+
+.reenviar {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.reenviar a {
+  color: #1d3557;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.reenviar a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,156 @@
+:root {
+  --bg-start: #eaf6ff;
+  --bg-end: #cfe9ff;
+  --brand-primary: #1d4ed8;
+  --brand-dark: #0b132b;
+  --text-muted: #64748b;
+  --card-radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 0;
+}
+
+.topbar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.25rem; /* sin separación */
+  }
+
+.topbar .container {
+  max-width: 420px;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* Estilo del enlace "Volver a inicio" */
+.back-link {
+  color: #1d4ed8; /* color del logo */
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Contenedor principal centrado */
+.auth-wrap {
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem 3rem;
+}
+
+/* Tarjeta */
+.card-auth {
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: var(--card-radius);
+  box-shadow: 0 20px 40px rgba(13, 38, 76, 0.12);
+  padding: 28px;
+}
+
+/* Branding */
+.brand {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.brand img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px;
+}
+.brand-name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--brand-dark);
+  letter-spacing: 0.2px;
+}
+
+/* Encabezado, alineado como el login */
+.auth-title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 8px 0 18px;
+  color: var(--brand-dark);
+}
+
+/* Inputs y etiquetas */
+.form-label {
+  font-weight: 600;
+  color: var(--brand-dark);
+  margin-bottom: 0.35rem;
+}
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #d0d7e2;
+  padding: 0.8rem 0.9rem;
+  font-size: 1rem;
+}
+.form-control::placeholder {
+  color: #9aa6b2;
+}
+.form-control:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 0.2rem rgba(29, 78, 216, 0.15);
+}
+
+/* Botón principal */
+.btn-primary {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 0.8rem 1rem;
+}
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Enlaces secundarios */
+.aux {
+  text-align: center;
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+.aux a {
+  color: var(--brand-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.aux a:hover {
+  text-decoration: underline;
+}
+
+/* Accesibilidad visual */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+a {
+  text-decoration: none;
+}
