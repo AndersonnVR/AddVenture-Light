@@ -1,6 +1,7 @@
 package com.addventure.AddVenture.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -12,7 +13,9 @@ public class WebConfig implements WebMvcConfigurer {
     // archivos subidos por los usuarios.
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:uploads/");
+        registry.addResourceHandler("/uploads/**", "/js/**")
+                .addResourceLocations("file:uploads/", "classpath:/static/js/")
+                .setCacheControl(CacheControl.noStore()); // 🔥 evita caché
     }
+    
 }

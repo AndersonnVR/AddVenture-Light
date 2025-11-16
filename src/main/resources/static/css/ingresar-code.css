@@ -17,9 +17,8 @@ body {
   font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
     Arial, sans-serif;
   background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
-  display: grid;
-  grid-template-rows: auto 1fr;
-  padding: 0;
+  display: flex;              /* usa flexbox */
+  flex-direction: column;     /* primero topbar, luego main */
 }
 
 .topbar {
@@ -49,9 +48,11 @@ body {
 
 /* Contenedor principal centrado */
 .auth-wrap {
-  display: grid;
-  place-items: center;
-  padding: 2rem 1rem 3rem;
+  flex: 1;                    /* ocupa todo el espacio disponible */
+  display: flex;              /* centra con flexbox */
+  align-items: center;        /* centra verticalmente */
+  justify-content: center;    /* centra horizontalmente */
+  padding: 0;                 /* elimina padding extra */
 }
 
 /* Tarjeta */

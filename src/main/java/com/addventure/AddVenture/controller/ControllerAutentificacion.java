@@ -1,17 +1,29 @@
 package com.addventure.AddVenture.controller;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import com.addventure.AddVenture.email.EmailService;
+import com.addventure.AddVenture.model.Usuario;
 import com.addventure.AddVenture.ratelimit.RateLimiterService;
+import com.addventure.AddVenture.repository.UsuarioRepository;
 import com.addventure.AddVenture.verification.VerificationService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,15 +43,17 @@ public class ControllerAutentificacion {
     private final EmailService emailService; // Servicio de envío de correos
     private final VerificationService verificationService; // Genera y valida códigos
     private final RateLimiterService rateLimiter; // Limita solicitudes por email
+    private final UsuarioRepository usuarioRepository; // Repositorio de usuarios
 
     /**
      * Spring inyecta los servicios necesarios por constructor.
      */
     public ControllerAutentificacion(EmailService emailService, VerificationService verificationService,
-            RateLimiterService rateLimiter) {
+            RateLimiterService rateLimiter, UsuarioRepository usuarioRepository) {
         this.emailService = emailService;
         this.verificationService = verificationService;
         this.rateLimiter = rateLimiter;
+        this.usuarioRepository = usuarioRepository;
     }
 
     /**
@@ -91,13 +105,33 @@ public class ControllerAutentificacion {
      * - Si es correcto y no ha expirado → autenticación exitosa
      * - Si falla → 400 con mensaje
      */
+    /*
+     * @PostMapping("/verify-code")
+     * public ResponseEntity<?> verifyCode(@Valid @RequestBody VerifyCodeRequest
+     * req) {
+     * boolean ok = verificationService.verifyCode(req.email().toLowerCase(),
+     * req.code());
+     * if (ok) {
+     * return ResponseEntity.ok(Map.of("verified", true));
+     * } else {
+     * return ResponseEntity.status(400).body(Map.of("verified", false, "message",
+     * "Código inválido o expirado"));
+     * }
+     * }
+     */
+
     @PostMapping("/verify-code")
-    public ResponseEntity<?> verifyCode(@Valid @RequestBody VerifyCodeRequest req) {
-        boolean ok = verificationService.verifyCode(req.email().toLowerCase(), req.code());
+    public String verifyCode(@RequestParam String email,
+            @RequestParam String code,
+            HttpSession session) {
+        boolean ok = verificationService.verifyCode(email.toLowerCase(), code);
+
         if (ok) {
-            return ResponseEntity.ok(Map.of("verified", true));
+            session.setAttribute("codeValid", true); // marcar en sesión
+            return "redirect:/login"; // redirige directamente
         } else {
-            return ResponseEntity.status(400).body(Map.of("verified", false, "message", "Código inválido o expirado"));
+            return "redirect:/ingresar-code?error"; // vuelve a la página de código
         }
     }
+
 }

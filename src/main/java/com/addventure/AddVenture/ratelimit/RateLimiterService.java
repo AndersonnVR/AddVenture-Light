@@ -42,7 +42,7 @@ public class RateLimiterService {
     private final int maxSendsPerHour;
 
     /** Constructor con inyección del límite configurado */
-    public RateLimiterService(@Value("${app.verification.max-sends-per-hour:5}") int maxSendsPerHour) {
+    public RateLimiterService(@Value("${app.verification.max-sends-per-hour:100}") int maxSendsPerHour) {
         this.maxSendsPerHour = maxSendsPerHour;
     }
 
