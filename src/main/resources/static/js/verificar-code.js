@@ -1,67 +1,77 @@
-/*
-document
-  .getElementById("botonVerificar")
-  .addEventListener("click", function () {
-    fetch("http://127.0.0.1:8030/api/auth/verify-code", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: sessionStorage.getItem("email"),
-        code: document.getElementById("codigo").value,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.verified) {
-          sessionStorage.clear();
-          window.location.href = data.redirect;
-        } else {
-          alert("Error: " + data.message);
-          event.preventDefault();
-          // evita que el navegador cambie de página
-        }
-      })
-      .catch((error) => {
-        console.error("Error en la petición:", error);
-        alert("No se pudo conectar con el servidor.");
-        event.preventDefault();
-      });
-  });
+document.getElementById("botonVerificar").addEventListener("click", function (event) {
+  event.preventDefault(); // ⚠️ Prevenir el submit del form
 
-  */
+  const codigo = document.getElementById("codigo").value.trim();
+  const email = localStorage.getItem("email");
 
-  document.getElementById("botonVerificar").addEventListener("click", function () {
-  fetch("http://127.0.0.1:8030/api/auth/verify-code", {
+  // Validación básica
+  if (!codigo) {
+    mostrarError("Por favor ingresa el código");
+    return;
+  }
+
+  if (!email) {
+    mostrarError("No se encontró el email. Por favor regresa al login.");
+    return;
+  }
+
+  // Deshabilitar botón para evitar múltiples clicks
+  const boton = document.getElementById("botonVerificar");
+  boton.disabled = true;
+  boton.textContent = "Verificando...";
+
+  fetch("/api/auth/verify-code", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+    headers: { 
+      "Content-Type": "application/json" 
     },
+    credentials: "same-origin", // ✅ CRÍTICO: Envía cookies de sesión
     body: JSON.stringify({
-      email: localStorage.getItem("email"),
-      code: document.getElementById("codigo").value
-    }),
+      email: email,
+      code: codigo
+    })
   })
-  .then(async response => {
-    const text = await response.text();
-
-    try {
-      const json = JSON.parse(text);
-
-      if (!response.ok) {
-        alert("Error: " + (json.message || "Verificación fallida"));
+    .then(response => response.json())
+    .then(data => {
+      if (data.verified) {
+        // ✅ Código válido - redirigir al login
+        localStorage.removeItem("email"); // Limpiar email del localStorage
+        window.location.href = data.redirect || "/login";
       } else {
-        // ✅ Redirige al perfil
-        localStorage.clear();
-        window.location.href = "/login";
+        // ❌ Código inválido
+        mostrarError(data.message || "Código inválido o expirado");
+        boton.disabled = false;
+        boton.textContent = "Verificar";
       }
-    } catch (e) {
-      console.error("Respuesta no es JSON:", text);
-      alert("Error inesperado del servidor.");
-    }
-  })
-  .catch(error => {
-    console.error("Error en la petición:", error);
-    alert("No se pudo conectar con el servidor.");
-  });
+    })
+    .catch(error => {
+      console.error("Error en la petición:", error);
+      mostrarError("No se pudo conectar con el servidor. Intenta de nuevo.");
+      boton.disabled = false;
+      boton.textContent = "Verificar";
+    });
 });
 
+// Función helper para mostrar errores
+function mostrarError(mensaje) {
+  const mensajeError = document.getElementById("mensajeError");
+  if (mensajeError) {
+    mensajeError.textContent = mensaje;
+    mensajeError.style.display = "block";
+    
+    // Ocultar después de 5 segundos
+    setTimeout(() => {
+      mensajeError.style.display = "none";
+    }, 5000);
+  } else {
+    alert(mensaje);
+  }
+}
+
+// Permitir verificar con Enter
+document.getElementById("codigo").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("botonVerificar").click();
+  }
+});

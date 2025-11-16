@@ -67,7 +67,8 @@ public class SecurityConfig {
                 // Logout
                 .logout(logout -> logout
                         .logoutUrl("/logout") // URL para cerrar sesión
-                        .logoutSuccessUrl("/login?logout") // redirige al login
+                        .logoutSuccessUrl("/") // redirige al login
+                        .invalidateHttpSession(true)
                         .permitAll())
                 // Para API REST: evita redirección al login HTML
                 .httpBasic();
@@ -106,28 +107,44 @@ public class SecurityConfig {
                 FilterChain filterChain)
                 throws ServletException, IOException {
 
-            HttpSession session = request.getSession(false);
-            boolean codeValid = session != null && Boolean.TRUE.equals(session.getAttribute("codeValid"));
-
             String path = request.getRequestURI();
 
-            if (!codeValid
-                    && !path.equals("/ingresar-code")
-                    && !path.equals("/verify-code") // 👈 excluye endpoint de verificación
-                    && !path.equals("/login")
-                    && !path.equals("/registro")
-                    && !path.startsWith("/css")
-                    && !path.startsWith("/js")
-                    && !path.startsWith("/img")
-                    && !path.startsWith("/uploads")
-                    && !path.startsWith("/api")) {
+            // 🔓 Rutas SIEMPRE públicas
+            if (path.equals("/ingresar-code")
+                    || path.equals("/login")
+                    || path.equals("/registro")
+                    || path.equals("/")
+                    || path.equals("/logout")
+                    || path.startsWith("/css")
+                    || path.startsWith("/js")
+                    || path.startsWith("/img")
+                    || path.startsWith("/uploads")
+                    || path.startsWith("/api")) {
 
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            // 🔒 Para rutas protegidas, verificar autenticación Y código
+            HttpSession session = request.getSession(false);
+
+            // Si no hay sesión o no está autenticado, dejar que Spring Security maneje
+            if (session == null || request.getUserPrincipal() == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            // Si está autenticado, verificar si validó el código
+            boolean codeValid = Boolean.TRUE.equals(session.getAttribute("codeValid"));
+
+            if (!codeValid) {
+                System.out.println("⚠️ Usuario autenticado pero sin código validado. Redirigiendo desde: " + path);
                 response.sendRedirect("/ingresar-code");
                 return;
             }
 
+            // ✅ Autenticado Y código válido
             filterChain.doFilter(request, response);
         }
     }
-
 }

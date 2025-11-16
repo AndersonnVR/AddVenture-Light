@@ -8,19 +8,14 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
     />
-
-    <!-- Bootstrap -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-
-    <!-- Css personalizado-->
     <link rel="stylesheet" th:href="@{/css/ingresar-code.css}" />
   </head>
 
   <body>
-    <!-- Contenido centrado -->
     <main class="auth-wrap">
       <div class="card-auth">
         <!-- Branding -->
@@ -39,15 +34,13 @@
           </a>
         </div>
 
-        <!-- Título (alineado como el de login) -->
+        <!-- Título -->
         <h1 class="auth-title">Verifica tu código</h1>
 
-        <!-- Formulario -->
-        <form action="/verificar-codigo" method="POST" novalidate>
+        <!-- ⚠️ IMPORTANTE: form sin action para que JS maneje todo -->
+        <form id="formVerificacion" onsubmit="return false;">
           <div class="mb-3">
-            <label for="codigo" class="form-label"
-              >Código de verificación</label
-            >
+            <label for="codigo" class="form-label">Código de verificación</label>
             <input
               type="text"
               class="form-control"
@@ -58,13 +51,19 @@
               placeholder="Ingresa tu código"
               required
               aria-describedby="codigoHelp"
+              maxlength="8"
             />
             <div id="codigoHelp" class="form-text">
               Revisa tu correo para encontrar el código.
             </div>
           </div>
 
-          <button id="botonVerificar" type="submit" class="btn btn-primary w-100">Verificar</button>
+          <!-- Mensaje de error -->
+          <div id="mensajeError" class="alert alert-danger" role="alert" style="display:none;"></div>
+
+          <button id="botonVerificar" type="button" class="btn btn-primary w-100">
+            Verificar
+          </button>
         </form>
 
         <!-- Enlace secundario -->
@@ -76,33 +75,22 @@
         </div>
       </div>
     </main>
-    <!
-    <!-- Mensaje de error -->
-<div id="mensajeError" style="display:none; color:red; margin-top:10px;"></div>
 
     <!-- Scripts -->
     <script th:src="@{/js/verificar-code.js}"></script>
-     <script th:src="@{/js/reenviar-code.js}"></script>
+    <script th:src="@{/js/reenviar-code.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-      // Mejora UX: Trim al enviar y bloqueo de caracteres no numéricos (si tu código es numérico)
+      // Mejora UX: Trim y validación
       (function () {
-        const form = document.querySelector("form");
         const input = document.getElementById("codigo");
 
         input.addEventListener("input", () => {
           // Quita espacios
           input.value = input.value.replace(/\s+/g, "");
-        });
-
-        form.addEventListener("submit", (e) => {
-          input.value = input.value.trim();
-          // Si solo aceptas números, descomenta:
-          // if (!/^\d{4,8}$/.test(input.value)) {
-          //   e.preventDefault();
-          //   input.focus();
-          //   alert('Ingresa un código válido.');
-          // }
+          // Solo números (opcional)
+          // input.value = input.value.replace(/\D/g, "");
         });
       })();
     </script>
