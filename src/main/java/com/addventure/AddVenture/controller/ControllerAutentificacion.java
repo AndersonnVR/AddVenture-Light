@@ -69,9 +69,9 @@ public class ControllerAutentificacion {
             // ✅ Marcar código como válido en la sesión
             session.setAttribute("codeValid", true);
             
-            System.out.println("✅ Código verificado correctamente para: " + email);
-            System.out.println("✅ Session ID: " + session.getId());
-            System.out.println("✅ codeValid set to: " + session.getAttribute("codeValid"));
+            System.out.println("Código verificado correctamente para: " + email);
+            System.out.println("Session ID: " + session.getId());
+            System.out.println("codeValid set to: " + session.getAttribute("codeValid"));
             
             return ResponseEntity.ok(Map.of(
                 "verified", true,
@@ -79,7 +79,7 @@ public class ControllerAutentificacion {
                 "redirect", "/login"
             ));
         } else {
-            System.out.println("❌ Código inválido para: " + email);
+            System.out.println("Código inválido para: " + email);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                 "verified", false,
                 "message", "Código inválido o expirado"

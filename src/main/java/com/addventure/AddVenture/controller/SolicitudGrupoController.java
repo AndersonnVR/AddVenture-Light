@@ -48,7 +48,7 @@ public class SolicitudGrupoController {
 
             solicitudGrupoService.enviarSolicitud(usuarioActual, grupo);
             redirectAttributes.addFlashAttribute("mensajeExito",
-                    "Tu solicitud fue enviada exitosamente. El organizador la revisará pronto. 📨");
+                    "Tu solicitud fue enviada exitosamente. El organizador la revisará pronto. ");
 
         } catch (SolicitudException e) {
             logger.warn("Error de negocio en la solicitud por '{}': {}", principal.getUsername(), e.getMessage());
@@ -57,13 +57,13 @@ public class SolicitudGrupoController {
         } catch (EntityNotFoundException e) {
             logger.warn("Intento de solicitud a grupo inexistente ID {} por '{}'", id, principal.getUsername());
             redirectAttributes.addFlashAttribute("mensajeError",
-                    "El grupo que estás buscando no existe o fue eliminado. 🗑️");
+                    "El grupo que estás buscando no existe o fue eliminado. ");
 
         } catch (Exception e) {
             logger.error("Error inesperado al solicitar ingreso al grupo ID {} por '{}': {}",
                     id, principal.getUsername(), e.getMessage(), e);
             redirectAttributes.addFlashAttribute("mensajeError",
-                    "Ocurrió un problema al enviar tu solicitud. Intenta nuevamente más tarde. 🔁");
+                    "Ocurrió un problema al enviar tu solicitud. Intenta nuevamente más tarde. ");
         }
 
         return "redirect:/mis-viajes/" + id;
@@ -86,7 +86,7 @@ public class SolicitudGrupoController {
         } catch (EntityNotFoundException e) {
             logger.warn("Intento de cancelar solicitud a grupo inexistente ID {} por '{}'", id, principal.getUsername());
             redirectAttributes.addFlashAttribute("mensajeError",
-                    "El grupo que estás buscando no existe o fue eliminado. 🗑️");
+                    "El grupo que estás buscando no existe o fue eliminado. ");
 
         } catch (Exception e) {
             logger.warn("Error al cancelar solicitud para el grupo ID {} por '{}': {}",
@@ -126,7 +126,7 @@ public class SolicitudGrupoController {
             logger.error("Error inesperado al aceptar solicitud ID {} por '{}': {}",
                     id, principal.getUsername(), e.getMessage(), e);
             redirectAttributes.addFlashAttribute("mensajeError",
-                    "Ocurrió un error al aceptar la solicitud. Intenta más tarde. 🔁");
+                    "Ocurrió un error al aceptar la solicitud. Intenta más tarde. ");
         }
 
         return "redirect:/mis-viajes";

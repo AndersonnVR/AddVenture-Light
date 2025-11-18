@@ -36,3 +36,10 @@ build/
 /logs/
 
 .env
+
+## .msi ##
+*.msi
+
+## txt ##
+*.txt
+

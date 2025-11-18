@@ -389,12 +389,12 @@ public class GrupoViajeController {
         try {
             grupoViajeService.actualizarEstadosDeGrupos();
             redirectAttributes.addFlashAttribute("mensajeExito",
-                    "¡Tarea de actualización de estados ejecutada exitosamente! ✅");
+                    "¡Tarea de actualización de estados ejecutada exitosamente! ");
         
         } catch (Exception e) {
             logger.error("Error técnico al actualizar manualmente los estados de los grupos: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("mensajeError",
-                    "Ocurrió un error durante la actualización manual de estados. ⛔");
+                    "Ocurrió un error durante la actualización manual de estados. ");
         }
 
         // Redirigimos a la lista de viajes para ver los cambios
