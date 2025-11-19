@@ -28,9 +28,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf
+                    .ignoringRequestMatchers("/sendMessageFile", "/sendMessage") 
+                )
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/registro", "/login", "/css/**", "/js/**", "/img/**", "/uploads/**")
+                        .requestMatchers(
+                            "/", 
+                                        "/registro", 
+                                        "/verificar",        // <--- ¡ESTO ES CRUCIAL!
+                                        "/reenviar-codigo",  
+                                        "/sendMessageFile", "/sendMessage",
+                                        "/login", 
+                                        "/css/**", "/js/**", "/img/**", "/uploads/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form

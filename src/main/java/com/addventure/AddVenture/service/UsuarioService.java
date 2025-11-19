@@ -42,40 +42,37 @@ public class UsuarioService {
 
     private final String UPLOAD_DIR = "uploads";
 
+    public String guardarImagenTemporal(MultipartFile archivo) {
+        if (archivo != null && !archivo.isEmpty()) {
+            try {
+                String nombreArchivo = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
+                Path rutaDestino = Paths.get(UPLOAD_DIR).resolve(nombreArchivo).toAbsolutePath();
+                Files.createDirectories(rutaDestino.getParent());
+                archivo.transferTo(rutaDestino);
+                return nombreArchivo;
+            } catch (IOException e) {
+                throw new RuntimeException("Error al guardar la imagen de perfil: " + e.getMessage());
+            }
+        }
+        return "perfil_defecto.png"; // Retorna imagen por defecto si no hay archivo
+    }
+
     // Este método registra un nuevo usuario en la base de datos.
-    public Usuario registrarUsuario(RegistroUsuarioDTO dto) {
+    public Usuario registrarUsuarioFinal(RegistroUsuarioDTO dto, String nombreImagenGuardada) {
         Usuario nuevo = new Usuario();
+
+        //Datos básicos
         nuevo.setNombre(dto.getNombre());
         nuevo.setApellido(dto.getApellido());
         nuevo.setNombreUsuario(dto.getNombreUsuario());
         nuevo.setDescripcion(dto.getDescripcion());
-
         nuevo.setPais(dto.getPais());
         nuevo.setCiudad(dto.getCiudad());
         nuevo.setFechaNacimiento(dto.getFechaNacimiento());
         nuevo.setCorreo(dto.getCorreo());
         nuevo.setContrasenia(passwordEncoder.encode(dto.getContrasenia()));
         nuevo.setRol("ROLE_USER");
-
-        // Manejo de la imagen de perfil
-        MultipartFile archivo = dto.getFotoPerfil();
-        if (archivo != null && !archivo.isEmpty()) {
-            // Genera un nombre único para el archivo usando UUID
-            String nombreArchivo = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
-            Path rutaDestino = Paths.get(UPLOAD_DIR).resolve(nombreArchivo).toAbsolutePath();
-
-            // Crea el directorio si no existe y guarda el archivo
-            try {
-                Files.createDirectories(rutaDestino.getParent());
-                archivo.transferTo(rutaDestino);
-                nuevo.setFotoPerfil(nombreArchivo);
-            } catch (IOException e) {
-                throw new RuntimeException("Error al guardar la imagen de perfil: " + e.getMessage());
-            }
-        } else {
-            // Si no se subió una imagen, asigna una imagen por defecto
-            nuevo.setFotoPerfil("perfil_defecto.png");
-        }
+        nuevo.setFotoPerfil(nombreImagenGuardada);
 
          // Buscar el logro base "Miembro de la comunidad"
         Logro logroComunidad = logroRepository.findByNombre("Miembro de la comunidad")

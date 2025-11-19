@@ -7,12 +7,18 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 //Esta clase representa una tabla de usuarios en la base de datos.
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "Usuario")
 public class Usuario {
@@ -101,160 +107,4 @@ public class Usuario {
     @ToString.Exclude
     @OneToMany(mappedBy = "solicitante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SolicitudGrupo> solicitudesEnviadas = new ArrayList<>();
-
-    // Constructor, getters y setters
-    public Usuario() {
-    }
-
-    public Usuario(String nombre, String apellido, String nombreUsuario, String fotoPerfil, String descripcion,
-            String pais, String ciudad, LocalDate fechaNacimiento, String correo, String contrasenia, String rol) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.nombreUsuario = nombreUsuario;
-        this.fotoPerfil = fotoPerfil;
-        this.descripcion = descripcion;
-        this.pais = pais;
-        this.ciudad = ciudad;
-        this.fechaNacimiento = fechaNacimiento;
-        this.correo = correo;
-        this.contrasenia = contrasenia;
-        this.rol = rol;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getContrasenia() {
-        return contrasenia;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getFotoPerfil() {
-        return fotoPerfil;
-    }
-
-    public void setFotoPerfil(String fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
-    }
-
-    public List<Logro> getLogros() {
-        return logros;
-    }
-
-    public void setLogros(List<Logro> logros) {
-        this.logros = logros;
-    }
-
-    public List<Pasaporte> getPasaportes() {
-        return pasaportes;
-    }
-
-    public void setPasaportes(List<Pasaporte> pasaportes) {
-        this.pasaportes = pasaportes;
-    }
-
-    public List<Opinion> getOpinionesRealizadas() {
-        return opinionesRealizadas;
-    }
-
-    public void setOpinionesRealizadas(List<Opinion> opinionesRealizadas) {
-        this.opinionesRealizadas = opinionesRealizadas;
-    }
-
-    public List<Opinion> getOpinionesRecibidas() {
-        return opinionesRecibidas;
-    }
-
-    public void setOpinionesRecibidas(List<Opinion> opinionesRecibidas) {
-        this.opinionesRecibidas = opinionesRecibidas;
-    }
-
-    public LocalDateTime getUltimoIngreso() {
-        return ultimoIngreso;
-    }
-
-    public void setUltimoIngreso(LocalDateTime ultimoIngreso) {
-        this.ultimoIngreso = ultimoIngreso;
-    }
-    
 }

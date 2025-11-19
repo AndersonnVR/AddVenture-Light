@@ -1,24 +1,57 @@
-/* Borde azul grueso para la imagen o sección del usuario */
-.border-user {
-    border: 6px solid #0d6efd;
-    padding: 4px;
-    transition: box-shadow 0.3s;
+:root {
+    --primary-color: #0d6efd;
+    --secondary-bg: #f8f9fa;
+    --card-border-radius: 16px;
 }
 
-/* Animación de resplandor al pasar el mouse sobre la imagen de usuario */
-.border-user:hover {
-    box-shadow: 0 0 16px 2px #0d6efd66;
+/* Header del Perfil */
+.profile-header-card {
+    border: none;
+    border-radius: var(--card-border-radius);
+    background: white;
+    overflow: hidden;
+    margin-top: -20px;
 }
 
-/* Icono de verificación azul junto al nombre de usuario */
+.profile-img-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-img {
+    border: 5px solid #E1EDFE;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.profile-img:hover {
+    transform: scale(1.02);
+}
+
 .verified-badge {
-    color: #0d6efd;
+    color: #1da1f2;
     font-size: 1.2rem;
-    margin-left: 6px;
-    transition: color 0.3s;
+    margin-left: 5px;
 }
-.verified-badge:hover {
-    color: #198754;
+
+/* Iconos de datos personales con fondo */
+.info-icon-box {
+    width: 45px;
+    height: 45px;
+    background-color: rgba(13, 110, 253, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    margin-right: 15px;
+    transition: all 0.3s ease;
+}
+
+.info-item:hover .info-icon-box {
+    background-color: var(--primary-color);
+    color: white;
 }
 
 /* Tarjeta para mostrar logros del usuario */

@@ -27,6 +27,13 @@
 
                     <h2 class="mb-4 text-center">Inicia sesión</h2>
 
+                    <!-- Mensaje de verificación exitosa -->
+                    <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <span th:text="${mensaje}">Mensaje de éxito</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
                     <!-- Mensajes de error y logout -->
                     <div th:if="${param.error}" class="alert alert-danger">
                         ❌ Usuario o contraseña inválidos.

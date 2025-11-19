@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verificación de Cuenta</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #0d6efd;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+            text-align: center;
+            color: #333;
+        }
+
+        .code-box {
+            background-color: #eef2f7;
+            border: 2px dashed #0d6efd;
+            color: #0d6efd;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            padding: 15px;
+            margin: 20px auto;
+            width: fit-content;
+            border-radius: 8px;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="cid:logoImagen" alt="AddVenture Logo" width="80" style="margin-bottom: 10px;">
+            <h2 style="margin:0;">¡Bienvenido a AddVenture!</h2>
+        </div>
+        <div class="content">
+            <p>Hola,</p>
+            <p>Gracias por registrarte. Para activar tu cuenta, por favor ingresa el siguiente código de verificación:
+            </p>
+
+            <div class="code-box" th:text="${codigo}">123456</div>
+
+            <p>Este código expirará en 10 minutos.</p>
+            <p>Si no has solicitado este registro, puedes ignorar este mensaje.</p>
+        </div>
+        <div class="footer">
+            &copy; 2025 AddVenture. Todos los derechos reservados.<br>
+            Piura, Perú.
+        </div>
+    </div>
+</body>
+
+</html>
