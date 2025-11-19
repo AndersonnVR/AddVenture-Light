@@ -217,3 +217,8 @@ body {
     color: #6b7280;
     cursor: pointer;
 }
+
+.required-field {
+    color: #ba1111;
+    font-weight: bold;
+}

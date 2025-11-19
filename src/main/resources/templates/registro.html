@@ -41,6 +41,7 @@
                                 <div class="col-md-6">
                                     <label class="form-label">
                                         <i class="fa-regular fa-user me-2"></i>Nombre
+                                        <span class="required-field">*</span>
                                     </label>
                                     <input type="text" th:field="*{nombre}" class="form-control"
                                         th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''"
@@ -49,7 +50,7 @@
                                         th:errors="*{nombre}"></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Apellido</label>
+                                    <label class="form-label">Apellido <span class="required-field">*</span></label>
                                     <input type="text" th:field="*{apellido}" class="form-control"
                                         th:classappend="${#fields.hasErrors('apellido')} ? 'is-invalid' : ''"
                                         placeholder="Tu apellido">
@@ -61,6 +62,7 @@
                             <div class="mb-3">
                                 <label class="form-label">
                                     <i class="fa-regular fa-at me-2"></i>Nombre de usuario
+                                    <span class="required-field">*</span>
                                 </label>
                                 <input type="text" th:field="*{nombreUsuario}" class="form-control"
                                     th:classappend="${#fields.hasErrors('nombreUsuario')} ? 'is-invalid' : ''"
@@ -91,6 +93,7 @@
                                 <div class="col-md-6">
                                     <label class="form-label">
                                         <i class="bi bi-globe me-2"></i>País
+                                        <span class="required-field">*</span>
                                     </label>
                                     <input type="text" th:field="*{pais}" class="form-control"
                                         th:classappend="${#fields.hasErrors('pais')} ? 'is-invalid' : ''"
@@ -101,6 +104,7 @@
                                 <div class="col-md-6">
                                     <label class="form-label">
                                         <i class="bi bi-geo-alt me-2"></i>Ciudad
+                                        <span class="required-field">*</span>
                                     </label>
                                     <input type="text" th:field="*{ciudad}" class="form-control"
                                         th:classappend="${#fields.hasErrors('ciudad')} ? 'is-invalid' : ''"
@@ -113,6 +117,7 @@
                             <div class="mb-3">
                                 <label class="form-label">
                                     <i class="fa-regular fa-calendar me-2"></i>Fecha de nacimiento
+                                    <span class="required-field">*</span>
                                 </label>
                                 <input type="date" th:field="*{fechaNacimiento}"
                                     th:value="${usuario.fechaNacimiento != null ? #temporals.format(usuario.fechaNacimiento, 'yyyy-MM-dd') : ''}"
@@ -126,6 +131,7 @@
                             <div class="mb-3">
                                 <label class="form-label">
                                     <i class="fa-regular fa-envelope me-2"></i>Email
+                                    <span class="required-field">*</span>
                                 </label>
                                 <input type="email" th:field="*{correo}" class="form-control"
                                     th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid' : ''"
@@ -137,6 +143,7 @@
                             <div class="mb-3">
                                 <label class="form-label">
                                     <i class="bi bi-lock me-2"></i>Contraseña
+                                    <span class="required-field">*</span>
                                 </label>
                                 <div class="position-relative">
                                     <input type="password" th:field="*{contrasenia}" class="form-control"
@@ -153,7 +160,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="confirmarContrasenia" class="form-label">Confirmar contraseña</label>
+                                <label for="confirmarContrasenia" class="form-label">Confirmar contraseña <span class="required-field">*</span></label>
                                 <div class="position-relative">
                                     <input type="password" th:field="*{confirmarContrasenia}" class="form-control"
                                         th:classappend="${#fields.hasErrors('confirmarContrasenia')} ? 'is-invalid' : ''"
