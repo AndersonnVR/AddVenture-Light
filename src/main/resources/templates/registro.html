@@ -95,9 +95,14 @@
                                         <i class="bi bi-globe me-2"></i>País
                                         <span class="required-field">*</span>
                                     </label>
-                                    <input type="text" th:field="*{pais}" class="form-control"
-                                        th:classappend="${#fields.hasErrors('pais')} ? 'is-invalid' : ''"
-                                        placeholder="Ej: Perú">
+                                    <select th:field="*{pais}" id="selectPais" class="form-select"
+                                        th:classappend="${#fields.hasErrors('pais')} ? 'is-invalid' : ''">
+                                        <option value="">Selecciona tu país...</option>
+                                        <option value="Perú">Perú</option>
+                                        <option value="Colombia">Colombia</option>
+                                        <option value="Argentina">Argentina</option>
+                                        <option value="Brasil">Brasil</option>
+                                    </select>
                                     <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('pais')}"
                                         th:errors="*{pais}"></div>
                                 </div>
@@ -106,9 +111,10 @@
                                         <i class="bi bi-geo-alt me-2"></i>Ciudad
                                         <span class="required-field">*</span>
                                     </label>
-                                    <input type="text" th:field="*{ciudad}" class="form-control"
-                                        th:classappend="${#fields.hasErrors('ciudad')} ? 'is-invalid' : ''"
-                                        placeholder="Tu ciudad">
+                                    <select th:field="*{ciudad}" id="selectCiudad" class="form-select" disabled
+                                        th:classappend="${#fields.hasErrors('ciudad')} ? 'is-invalid' : ''">
+                                        <option value="">Selecciona primero un país</option>
+                                    </select>
                                     <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('ciudad')}"
                                         th:errors="*{ciudad}"></div>
                                 </div>
