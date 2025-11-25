@@ -7,69 +7,85 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+<<<<<<< Updated upstream
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 //Esta clase representa una tabla de usuarios en la base de datos.
+=======
+import lombok.*;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+>>>>>>> Stashed changes
 @Entity
 @Table(name = "Usuario")
 public class Usuario {
 
-    //Declarar los campos o atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long id;
 
-    // === Datos personales ===
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 50)
+    @Column(name = "nombre")
     private String nombre;
 
     @NotBlank(message = "El apellido es obligatorio")
     @Size(max = 50)
+    @Column(name = "apellido")
     private String apellido;
 
     @NotBlank(message = "El nombre de usuario es obligatorio")
     @Size(min = 4, max = 30)
-    @Column(unique = true, nullable = false)
+    @Column(name = "nombre_usuario", unique = true, nullable = false)
     private String nombreUsuario;
 
     @Size(max = 255)
-    private String fotoPerfil; // Opcional → no se marca con @NotBlank
+    @Column(name = "foto_perfil")
+    private String fotoPerfil;
 
-    @Size(max = 500)
-    private String descripcion; // Opcional
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
 
     @NotBlank(message = "El país es obligatorio")
+    @Column(name = "pais")
     private String pais;
 
     @NotBlank(message = "La ciudad es obligatoria")
+    @Column(name = "ciudad")
     private String ciudad;
 
     @NotNull(message = "La fecha de nacimiento es obligatoria")
+    @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
-    // === Datos de autenticación ===
     @NotBlank(message = "El correo es obligatorio")
     @Email(message = "Correo electrónico no válido")
-    @Column(unique = true, nullable = false)
+    @Column(name = "correo", unique = true, nullable = false)
     private String correo;
 
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
-    @Column(nullable = false)
+    @Column(name = "contrasenia", nullable = false)
     private String contrasenia;
 
     @NotBlank(message = "El rol es obligatorio")
-    private String rol; // Ej: ROLE_USER, ROLE_ADMIN
+    @Column(name = "rol")
+    private String rol;
 
     private LocalDateTime ultimoIngreso;
 
-    // RELACIONES EXISTENTES
     @ManyToMany
-    @JoinTable(name = "usuario_logro", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "logro_id"))
+    @JoinTable(
+        name = "usuario_logro", 
+        joinColumns = @JoinColumn(name = "usuario_id"), 
+        inverseJoinColumns = @JoinColumn(name = "logro_id")
+    )
     private List<Logro> logros = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -81,26 +97,21 @@ public class Usuario {
     @OneToMany(mappedBy = "destinatario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Opinion> opinionesRecibidas = new ArrayList<>();
 
-    @Getter
-    @Setter
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GrupoViaje> gruposCreados = new ArrayList<>();
 
-    @Getter
-    @Setter
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParticipanteGrupo> participaciones = new ArrayList<>();
 
-    @Getter
-    @Setter
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "solicitante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SolicitudGrupo> solicitudesEnviadas = new ArrayList<>();
+<<<<<<< Updated upstream
 
     // Constructor, getters y setters
     public Usuario() {
@@ -256,5 +267,7 @@ public class Usuario {
     public void setUltimoIngreso(LocalDateTime ultimoIngreso) {
         this.ultimoIngreso = ultimoIngreso;
     }
+=======
+>>>>>>> Stashed changes
     
 }

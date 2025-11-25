@@ -9,7 +9,7 @@ public class MayorDeEdadValidator implements ConstraintValidator<MayorDeEdad, Lo
     @Override
     public boolean isValid(LocalDate fechaNacimiento, ConstraintValidatorContext context) {
         if (fechaNacimiento == null) {
-            return false; // El campo es obligatorio
+            return false;
         }
 
         LocalDate hoy = LocalDate.now();

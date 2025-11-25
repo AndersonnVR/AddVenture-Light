@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-//Esta clase maneja los errores globales de la aplicación
+
 @Controller
 public class GlobalErrorHandler implements ErrorController {
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
-        // Obtener el código de estado HTTP desde la petición
+        
         Object statusCode = request.getAttribute("jakarta.servlet.error.status_code");
         int status = statusCode != null ? Integer.parseInt(statusCode.toString()) : 500;
 

@@ -20,13 +20,10 @@ import com.addventure.AddVenture.model.Usuario;
 @Repository
 public interface SolicitudGrupoRepository extends JpaRepository<SolicitudGrupo, Long> {
 
-    // Verificar si el usuario ya tiene una solicitud en este grupo
     Optional<SolicitudGrupo> findBySolicitanteAndGrupo(Usuario solicitante, GrupoViaje grupo);
 
-    // Obtener todas las solicitudes pendientes de un grupo (o de cualquier otro estado)
     List<SolicitudGrupo> findByGrupoAndEstado(GrupoViaje grupo, EstadoSolicitud estado);
-
-    // Obtener todas las solicitudes enviadas por un usuario
+    
     List<SolicitudGrupo> findBySolicitante(Usuario solicitante);
 
     @Modifying

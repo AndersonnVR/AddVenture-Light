@@ -17,7 +17,6 @@ import com.addventure.AddVenture.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
-// Esta clase maneja las peticiones relacionadas con el registro de nuevos usuarios
 @Controller
 @RequestMapping("/registro")
 public class RegistroController {
@@ -25,8 +24,15 @@ public class RegistroController {
     @Autowired
     private UsuarioService usuarioService;
 
+<<<<<<< Updated upstream
     // Este método muestra el formulario de registro cuando el usuario no está autenticado
     @GetMapping
+=======
+    @Autowired
+    private EmailService emailService;
+    
+    @GetMapping("/registro")
+>>>>>>> Stashed changes
     public String mostrarFormularioRegistro(Model model, Principal principal) {
         if (principal != null) {
             return "redirect:/perfil";

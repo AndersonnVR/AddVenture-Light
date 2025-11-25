@@ -26,6 +26,6 @@ public interface SolicitudGrupoService {
 
     Page<GrupoViaje> obtenerGruposConSolicitudesPendientesPaginado(Usuario usuario, int page, int size);
     
-    //NUEVO MÉTODO
     Page<GrupoViaje> obtenerGruposFiltrados(Usuario usuario, String destino, LocalDate fechaInicio, LocalDate fechaFin, int page, int size);
+
 }

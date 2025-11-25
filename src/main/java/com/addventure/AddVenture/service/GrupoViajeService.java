@@ -33,6 +33,6 @@ public interface GrupoViajeService {
     
     void desactivarGrupoViaje(Long id, Usuario usuarioActual);
     
-    //Filtro
     Page<GrupoViaje> filtrarPorEstadosYFechas(LocalDate fechaInicio, LocalDate fechaFin, String estado, Usuario usuario, int page, int size);
+
 }

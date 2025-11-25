@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.addventure.AddVenture.handler.CustomLoginSuccessHandler;
 
-//Esta clase configura la seguridad de la aplicación, incluyendo autenticación y autorización.
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -23,8 +22,6 @@ public class SecurityConfig {
     @Autowired
     private CustomLoginSuccessHandler customLoginSuccessHandler;
 
-    // Este método define la cadena de filtros de seguridad para la aplicación.
-    // Configura las rutas públicas y protegidas, el inicio de sesión personalizado y el manejo de cierre de sesión.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -44,7 +41,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //Autentica usuarios usando un servicio y un codificador de contraseñas.
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -53,13 +49,11 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    // Codifica y verifica contraseñas usando BCrypt.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    //Orquesta el proceso de autenticación en la aplicación.
+    
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();

@@ -16,13 +16,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//Esta clase maneja el evento de éxito de autenticación y actualiza el último ingreso del usuario en la BD
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Este método se llama cuando la autenticación es exitosa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
@@ -34,8 +33,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             usuario.setUltimoIngreso(LocalDateTime.now());
             usuarioRepository.save(usuario);
         });
-
-        // Redirige al usuario a su perfil después de iniciar sesión
+        
         response.sendRedirect("/perfil");
     }
 }

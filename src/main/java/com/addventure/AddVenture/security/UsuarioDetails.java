@@ -9,8 +9,6 @@ import com.addventure.AddVenture.model.Usuario;
 import java.util.Collection;
 import java.util.List;
 
-// Esta clase implementa UserDetails para proporcionar detalles del usuario autenticado y sus roles. 
-// Es utilizada por Spring Security para manejar la autenticación y autorización.
 public class UsuarioDetails implements UserDetails {
 
     private final Usuario usuario;
@@ -18,8 +16,7 @@ public class UsuarioDetails implements UserDetails {
     public UsuarioDetails(Usuario usuario) {
         this.usuario = usuario;
     }
-
-    // Devuelve una colección de autoridades (roles) del usuario.
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(usuario.getRol()));

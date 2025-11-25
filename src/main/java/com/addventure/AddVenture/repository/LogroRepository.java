@@ -9,5 +9,7 @@ import com.addventure.AddVenture.model.Logro;
 
 @Repository
 public interface LogroRepository extends JpaRepository<Logro, Long> {
+
     Optional<Logro> findByNombre(String nombre);
+    
 }
