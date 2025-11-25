@@ -7,5 +7,7 @@ import com.addventure.AddVenture.model.Opinion;
 import com.addventure.AddVenture.model.Usuario;
 
 public interface OpinionRepository extends JpaRepository<Opinion, Long> {
+
     List<Opinion> findByDestinatario(Usuario destinatario);
+    
 }

@@ -45,8 +45,7 @@ public interface GrupoViajeRepository extends JpaRepository<GrupoViaje, Long>{
 
     @Query("SELECT COUNT(g) > 0 FROM GrupoViaje g WHERE g.creador = :creador AND g.estado IN ('activo', 'en_curso') AND ((:inicio BETWEEN g.fechaInicio AND g.fechaFin) OR (:fin BETWEEN g.fechaInicio AND g.fechaFin) OR (g.fechaInicio BETWEEN :inicio AND :fin))")
     boolean existeConflictoDeFechasParaCreador(@Param("creador") Usuario creador, @Param("inicio") LocalDate inicio, @Param("fin") LocalDate fin);
-
-    // Útil para el filtro de grupos (unión entre módulos: búsqueda de grupos + gestión de grupos)
+    
     @Query("SELECT DISTINCT g FROM GrupoViaje g LEFT JOIN g.participantes p WHERE g.estado = :estado AND g.fechaInicio >= :fechaInicio AND g.fechaFin <= :fechaFin AND (g.creador = :usuario OR p.usuario = :usuario)")
     Page<GrupoViaje> findGruposPorEstadoYRangoFechas(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("estado") String estado, @Param("usuario") Usuario usuario, Pageable pageable);
     

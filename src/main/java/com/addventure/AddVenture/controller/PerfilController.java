@@ -13,7 +13,6 @@ import com.addventure.AddVenture.service.GrupoViajeService;
 
 import java.security.Principal;
 
-// Esta clase maneja las peticiones relacionadas con el perfil del usuario
 @Controller
 public class PerfilController {
 
@@ -26,7 +25,6 @@ public class PerfilController {
     @Autowired
     private GrupoViajeService grupoViajeService;
 
-    // Método que muestra el perfil del usuario autenticado
     @GetMapping("/perfil")
     public String index(Model model, Principal principal) {
 
@@ -46,8 +44,7 @@ public class PerfilController {
 
         return "perfil";
     }
-
-    // Método que muestra el perfil público de cualquier usuario por su nombreUsuario
+    
     @GetMapping("/perfil/{nombreUsuario}")
     public String verPerfilPublico(@PathVariable String nombreUsuario,
                                    Model model) {

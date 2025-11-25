@@ -28,25 +28,19 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage mensaje = mailSender.createMimeMessage();
 
         try {
-            // El 'true' indica que es multipart (permite adjuntos/imágenes)
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
             helper.setTo(destinatario);
             helper.setSubject("🔐 Código de verificación - AddVenture");
 
-            // 1. Preparamos el contexto (las variables para el HTML)
             Context context = new Context();
             context.setVariable("codigo", codigo);
 
-            // 2. Procesamos la plantilla HTML con las variables
             String htmlContent = templateEngine.process("email-verificacion", context);
-            helper.setText(htmlContent, true); // true indica que es HTML
+            helper.setText(htmlContent, true);
 
-            // 3. Incrustamos la imagen (CID)
-            // Asegúrate que la ruta coincida con donde tienes tu imagen
             ClassPathResource recursoImagen = new ClassPathResource("static/img/AddVenture_white.png");
-
-            // "logoImagen" debe coincidir con el cid:logoImagen del HTML
+            
             helper.addInline("logoImagen", recursoImagen);
 
             mailSender.send(mensaje);

@@ -1,14 +1,8 @@
 package com.addventure.AddVenture.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Entity
 @Table(name = "Itinerario")
@@ -18,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Itinerario {
 
-    //Declarar los campos o atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_itinerario")
@@ -37,7 +30,6 @@ public class Itinerario {
     @Column(columnDefinition = "TEXT")
     private String descripcion;
 
-    //Declarar las relaciones
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_grupo", nullable = false)
     private GrupoViaje grupo;

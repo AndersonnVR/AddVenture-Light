@@ -59,7 +59,6 @@ public class GrupoViajeController {
         this.solicitudGrupoService = solicitudGrupoService;
     }
 
-    // Listar todos los grupos de viaje
     @GetMapping("/mis-viajes")
     public String listarMisGruposViaje(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
@@ -70,25 +69,25 @@ public class GrupoViajeController {
                                        @AuthenticationPrincipal UsuarioDetails principal) {
 
         Usuario usuarioActual = principal.getUsuario();
-        Page<GrupoViaje> pagina; //EDITADO
+        Page<GrupoViaje> pagina;
 
         boolean filtrosIncompletos = (fechaInicio != null || fechaFin != null || (estado != null && !estado.trim().isEmpty()));
         boolean filtrosAplicados = (fechaInicio != null && fechaFin != null && estado != null && !estado.trim().isEmpty());
 
-        if(fechaInicio != null && fechaFin != null && fechaInicio.isAfter(fechaFin)){
+        if (fechaInicio != null && fechaFin != null && fechaInicio.isAfter(fechaFin)) {
             model.addAttribute("mensajeError", "La fecha de inicio no puede ser posterior a la fecha de fin.");
             pagina = grupoViajeService.obtenerGruposParaUsuarioPaginado(usuarioActual, page, size);
-        }else if(filtrosAplicados){
+        } else if (filtrosAplicados) {
             pagina = grupoViajeService.filtrarPorEstadosYFechas(fechaInicio, fechaFin, estado, usuarioActual, page, size);
-             if (!pagina.isEmpty()) { //limpia los campos cuando se han encontrado grupos
+             if (!pagina.isEmpty()) {
                 fechaInicio = null;
                 fechaFin = null;
                 estado = null;
             }
-        }else if(filtrosIncompletos){
+        } else if (filtrosIncompletos) {
             model.addAttribute("error", "Se deben ingresar todos los campos.");
             pagina = grupoViajeService.obtenerGruposParaUsuarioPaginado(usuarioActual, page, size);
-        }else{
+        } else {
             pagina = grupoViajeService.obtenerGruposParaUsuarioPaginado(usuarioActual, page, size);
         }
 
@@ -97,7 +96,6 @@ public class GrupoViajeController {
         model.addAttribute("numeroPagina", page);
         model.addAttribute("filtros", filtrosAplicados);
 
-        //Para mantener los filtros
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
         model.addAttribute("estado", estado);
@@ -106,7 +104,6 @@ public class GrupoViajeController {
         return "mis-viajes";
     }
 
-    // Listar los grupos de viaje donde se ha solicitado unirse (estado = 'PENDIENTE') -- MODIFICADO
     @GetMapping("/mis-viajes/solicitudes")
     public String listarGruposSolicitados(@RequestParam(required = false) String destinoPrincipal,
                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
@@ -117,32 +114,29 @@ public class GrupoViajeController {
                                           @AuthenticationPrincipal UsuarioDetails principal) {
 
         Usuario usuarioActual = principal.getUsuario();
-        Page<GrupoViaje> pagina; //EDITADO
+        Page<GrupoViaje> pagina;
 
         boolean filtrosIncompletos = (destinoPrincipal != null && !destinoPrincipal.isBlank()) || fechaInicio != null || fechaFin != null;
         boolean filtros = destinoPrincipal != null && !destinoPrincipal.isBlank() && fechaInicio != null && fechaFin != null;
 
-        //Si todos los campos estan completos
-        if(filtros){
+        if (filtros) {
             pagina = solicitudGrupoService.obtenerGruposFiltrados(usuarioActual, destinoPrincipal, fechaInicio, fechaFin, page, size);
-             if (!pagina.isEmpty()) { //limpia los campos cuando se han encontrado grupos
+             if (!pagina.isEmpty()) {
                 destinoPrincipal = null;
                 fechaInicio = null;
                 fechaFin = null;
             }
-        } 
-        //Si los filtros estan incompletos
-        else if( filtrosIncompletos){
+        } else if ( filtrosIncompletos) {
              model.addAttribute("error", "Se deben ingresar todos los campos.");
             pagina = solicitudGrupoService.obtenerGruposConSolicitudesPendientesPaginado(usuarioActual, page, size);
-        }else{
+        } else {
             pagina = solicitudGrupoService.obtenerGruposConSolicitudesPendientesPaginado(usuarioActual, page, size);
         }
 
         model.addAttribute("usuarioLogueado", usuarioActual);
         model.addAttribute("pagina", pagina);
         model.addAttribute("numeroPagina", page);
-        //Para mantener los valores de los filtros
+
         model.addAttribute("destinoPrincipal", destinoPrincipal);
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
@@ -151,14 +145,12 @@ public class GrupoViajeController {
         return "mis-solicitudes";
     }
 
-    // Mostrar formulario de creación de grupo de viaje
     @GetMapping("/crear-grupo")
     public String mostrarFormularioCreacion(Model model) {
         model.addAttribute("grupoViaje", new GrupoViaje());
         return "crear-grupo";
     }
 
-    // Procesar la creación del grupo de viaje
     @PostMapping("/crear-grupo")
     public String crearGrupoViaje(@Validated(ValidacionUsuario.class) @ModelAttribute("grupoViaje") GrupoViaje grupoViaje,
                                   BindingResult bindingResult,
@@ -166,21 +158,17 @@ public class GrupoViajeController {
                                   RedirectAttributes redirectAttributes,
                                   Model model,
                                   @AuthenticationPrincipal UsuarioDetails principal) {
-
-        // Si hay errores de validación, volver al formulario de creación
+        
         if (bindingResult.hasErrors()) {
             return "crear-grupo";
         }
 
         Usuario creador = principal.getUsuario();
 
-        // Usar el método auxiliar para convertir el String plano en Set<String> limpio
         Set<String> nombresEtiquetas = parsearEtiquetas(etiquetasString);
 
-        // Obtener la lista de itinerarios del grupo de viaje
         List<Itinerario> itinerariosPropuestos = grupoViaje.getItinerarios();   
 
-        // Intentar crear el grupo de viaje
         try {
             grupoViajeService.crearGrupoViaje(grupoViaje, creador, nombresEtiquetas, itinerariosPropuestos);
             redirectAttributes.addFlashAttribute("mensajeExito", "¡Grupo de viaje creado exitosamente! Prepárate para grandes aventuras. 🎉");
@@ -199,82 +187,64 @@ public class GrupoViajeController {
         return "redirect:/mis-viajes";
     }
 
-    // Método auxiliar para procesar una cadena de etiquetas y convertirla a un Set de nombres de etiquetas
     private Set<String> parsearEtiquetas(String etiquetasString) {
 
-        // Crear un conjunto vacío para almacenar los nombres de etiquetas
         Set<String> nombres = new HashSet<>();
 
-        // Verificar que la cadena de etiquetas no sea nula o vacía
         if (etiquetasString != null && !etiquetasString.trim().isEmpty()) {
-            // Separar la cadena de etiquetas por coma, punto y coma o espacios
             String[] tagsArray = etiquetasString.split("[,;\\s]+");
-            // Iterar sobre cada etiqueta en el array
             for (String tag : tagsArray) {
-                // Eliminar espacios en blanco al inicio y al final de la etiqueta
                 tag = tag.trim();
-                // Eliminar el símbolo # al inicio de la etiqueta si existe
                 if (tag.startsWith("#")) {
                     tag = tag.substring(1);
                 }
-                // Verificar que la etiqueta no esté vacía antes de agregarla al conjunto
                 if (!tag.isEmpty()) {
                     nombres.add(tag);
                 }
             }
         }
+
         return nombres;
     }
 
-    // Mostrar detalles de un grupo de viaje
     @GetMapping("/mis-viajes/{id}")
     public String verDetallesGrupo(@PathVariable("id") Long id,
                                    Model model,
                                    RedirectAttributes redirectAttributes,
                                    @AuthenticationPrincipal UsuarioDetails principal) {
 
-        // Buscar el grupo de viaje por su ID, puede no existir
         Optional<GrupoViaje> grupoOptional = grupoViajeService.obtenerGrupoPorId(id);
 
-        // Si el grupo no existe, lanzar una excepción
         if (grupoOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("mensajeError", "Grupo de viaje no encontrado. Revisa tus viajes o intenta más tarde. ❌");
             return "redirect:/mis-viajes";
         }
 
-        // Obtener el grupo de viaje y agregarlo al modelo
         GrupoViaje grupo = grupoOptional.get();
         model.addAttribute("grupo", grupo);
 
-        // Obtener los itinerarios ordenados para mostrar y agregarlos al modelo
         List<Itinerario> itinerariosOrdenados = itinerarioService.obtenerItinerariosPorGrupo(grupo);
         model.addAttribute("itinerarios", itinerariosOrdenados);
 
         Usuario usuarioActual = principal.getUsuario();
         model.addAttribute("usuarioLogueado", usuarioActual);
 
-        // Verificación si es el creador
         boolean esCreador = grupo.getCreador().getId().equals(usuarioActual.getId());
         model.addAttribute("esCreador", esCreador);
 
-        // Usamos el servicio para preguntar si el usuario ya es miembro.
         boolean esParticipante = participanteGrupoService.esUsuarioParticipante(id, usuarioActual);
         model.addAttribute("esParticipante", esParticipante);
 
-        // Validar si el grupo está lleno
         boolean grupoLleno = grupo.getParticipantes().size() >= grupo.getMaxParticipantes();
         model.addAttribute("grupoLleno", grupoLleno);
 
-        // Validar si ya existen solicitudes previas (lo que indica que el grupo está en modo de solicitudes)
         boolean permiteSolicitudes = grupoLleno || !solicitudGrupoService.obtenerSolicitudesPendientesDeGrupo(grupo).isEmpty();
         model.addAttribute("permiteSolicitudes", permiteSolicitudes);
         
-        // Validar si el usuario ya envió una solicitud (que no esté rechazada)
         Optional<SolicitudGrupo> solicitudExistente = solicitudGrupoService.obtenerSolicitudPorUsuarioYGrupo(usuarioActual, grupo);
         boolean yaSolicito = solicitudExistente.isPresent() && solicitudExistente.get().getEstado() == EstadoSolicitud.PENDIENTE;
         model.addAttribute("yaSolicito", yaSolicito);
 
-        // Si es creador, cargar las solicitudes pendientes
         if (esCreador) {
             List<SolicitudGrupo> solicitudesPendientes = solicitudGrupoService.obtenerSolicitudesPendientesDeGrupo(grupo);
             model.addAttribute("solicitudesPendientes", solicitudesPendientes);
@@ -290,16 +260,13 @@ public class GrupoViajeController {
                                            RedirectAttributes redirectAttributes, 
                                            @AuthenticationPrincipal UsuarioDetails principal) {
         
-        // Buscar el grupo de viaje por su ID, puede no existir
         Optional<GrupoViaje> grupoOptional = grupoViajeService.obtenerGrupoPorId(id);
 
-        // Si el grupo no existe, lanzar una excepción
         if (grupoOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("mensajeError", "Grupo de viaje a editar no encontrado. Revisa tus grupos o intenta más tarde. ❌");
             return "redirect:/mis-viajes";
         }
 
-        // Obtener el grupo de viaje y agregarlo al modelo
         GrupoViaje grupo = grupoOptional.get();
 
         if (!grupo.getCreador().getId().equals(principal.getUsuario().getId())) {
@@ -311,7 +278,6 @@ public class GrupoViajeController {
         return "editar-grupo";
     }
 
-    // Procesar la edición del grupo (FORMULARIO POST)
     @PostMapping("/mis-viajes/editar/{id}")
     public String actualizarGrupoViaje(@PathVariable("id") Long id,
                                        @Validated(ValidacionUsuario.class) @ModelAttribute("grupoViaje") GrupoViaje grupoViaje,
@@ -328,7 +294,6 @@ public class GrupoViajeController {
 
         List<Itinerario> itinerariosActualizados = grupoViaje.getItinerarios();
 
-        // Intentar actualizar el grupo de viaje
         try {
             grupoViajeService.actualizarGrupoViaje(id, grupoViaje, itinerariosActualizados, usuarioActual);
             redirectAttributes.addFlashAttribute("mensajeExito", "¡Grupo de viaje actualizado exitosamente! Listo para nuevas aventuras. ✅");
@@ -361,7 +326,6 @@ public class GrupoViajeController {
                                        RedirectAttributes redirectAttributes,
                                        @AuthenticationPrincipal UsuarioDetails principal) {
 
-        // Intentar desactivar el grupo de viaje
         try {
             grupoViajeService.desactivarGrupoViaje(id, principal.getUsuario());
             redirectAttributes.addFlashAttribute("mensajeExito", "Grupo de viaje eliminado con éxito. ¡Nos vemos en la próxima aventura! 😉");
@@ -396,8 +360,7 @@ public class GrupoViajeController {
             redirectAttributes.addFlashAttribute("mensajeError",
                     "Ocurrió un error durante la actualización manual de estados. ⛔");
         }
-
-        // Redirigimos a la lista de viajes para ver los cambios
+        
         return "redirect:/mis-viajes";
     }
 

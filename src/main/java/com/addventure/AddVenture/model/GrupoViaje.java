@@ -2,27 +2,13 @@ package com.addventure.AddVenture.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.addventure.AddVenture.validacion.ValidacionUsuario;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Entity
 @Table(name = "GrupoViaje")
@@ -32,7 +18,6 @@ import lombok.ToString;
 @Builder
 public class GrupoViaje {
 
-    //Declarar los campos o atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_grupo")
@@ -104,8 +89,7 @@ public class GrupoViaje {
 
     @Column(length = 20, nullable = false)
     private String estado = "activo";
-
-    //Declarar las relaciones
+    
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "grupo", cascade = CascadeType.ALL, orphanRemoval = true)

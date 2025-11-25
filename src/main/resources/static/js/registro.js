@@ -77,9 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             selectCiudad.innerHTML = '<option value="">Selecciona primero un país</option>';
         }
     });
-
-    // 3. (Opcional) Validación extra: Si el usuario ya había elegido algo (ej. al fallar una validación y recargar)
-    // disparamos el evento manualmente para que se vuelvan a cargar las ciudades.
+    
     if (selectPais.value) {
         selectPais.dispatchEvent(new Event('change'));
     }

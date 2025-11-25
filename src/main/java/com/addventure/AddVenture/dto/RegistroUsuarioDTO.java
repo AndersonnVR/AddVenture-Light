@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-//Esta clase representa el DTO (Data Transfer Object) para el registro de un usuario.
 @ContraseniasIguales
 public class RegistroUsuarioDTO {
     @NotBlank(message = "El nombre es obligatorio")
@@ -52,9 +51,6 @@ public class RegistroUsuarioDTO {
     private String descripcion;
 
     private MultipartFile fotoPerfil;
-
-
-    // Getters y setters
 
     public String getNombre() {
         return nombre;

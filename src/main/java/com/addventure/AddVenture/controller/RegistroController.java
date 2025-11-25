@@ -21,7 +21,6 @@ import com.addventure.AddVenture.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
-// Esta clase maneja las peticiones relacionadas con el registro de nuevos usuarios
 @Controller
 public class RegistroController {
 
@@ -30,8 +29,7 @@ public class RegistroController {
 
     @Autowired
     private EmailService emailService;
-
-    // Este método muestra el formulario de registro cuando el usuario no está autenticado
+    
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model, Principal principal) {
         if (principal != null) {
@@ -41,16 +39,13 @@ public class RegistroController {
         return "registro";
     }
 
-    // Este método maneja el registro de nuevos usuarios
-    // Utiliza @ModelAttribute para vincular el formulario al DTO y @Valid para validar los datos
     @PostMapping("/registro")
     public String iniciarRegistro(
             @ModelAttribute("usuario") @Valid RegistroUsuarioDTO usuarioDTO,
             BindingResult result,
             HttpSession session,
             Model model) {
-
-        // Validaciones personalizadas
+        
         if (usuarioService.existeCorreo(usuarioDTO.getCorreo())) {
             result.rejectValue("correo", "error.usuario", "Este correo ya está registrado");
         }
@@ -59,7 +54,7 @@ public class RegistroController {
         }
 
         if (result.hasErrors()) {
-            return "registro"; // retorna con errores
+            return "registro";
         }
 
         String nombreImagen = usuarioService.guardarImagenTemporal(usuarioDTO.getFotoPerfil());
@@ -75,26 +70,23 @@ public class RegistroController {
 
         emailService.enviarCorreoVerificacion(usuarioDTO.getCorreo(), codigo);
         
-        System.out.println("Código enviado: " + codigo); // Para pruebas en consola
+        System.out.println("Código enviado: " + codigo);
 
         return "redirect:/verificar";
     }
 
-    //Mostrar vista de verificación
     @GetMapping("/verificar")
     public String mostrarVerificacion(HttpSession session, Model model) {
         RegistroUsuarioDTO usuarioTmp = (RegistroUsuarioDTO) session.getAttribute("usuarioTemporal");
         
-        // Si no hay usuario en sesión, devolver al registro (seguridad)
         if (usuarioTmp == null) {
             return "redirect:/registro";
         }
 
         model.addAttribute("correoOculto", enmascararCorreo(usuarioTmp.getCorreo()));
-        return "verificar"; // Retorna verificar.html
+        return "verificar";
     }
 
-    // Procesar el código ingresado
     @PostMapping("/verificar")
     public String verificarCodigo(
             @RequestParam("codigo") String codigoIngresado,
@@ -108,37 +100,33 @@ public class RegistroController {
         LocalDateTime tiempoInicio = (LocalDateTime) session.getAttribute("tiempoInicioCodigo");
 
         if (usuarioDTO == null || codigoReal == null) {
-            return "redirect:/registro"; // Sesión expirada
+            return "redirect:/registro";
         }
 
         long minutosTranscurridos = Duration.between(tiempoInicio, LocalDateTime.now()).toMinutes();
 
         if (minutosTranscurridos > 10) {
-            model.addAttribute("error", "El código ha expirado. Por favor, solicita uno nuevo.");
+            model.addAttribute("error", "El código ha expirado. Por favor, solicita uno nuevo. 🔁");
             model.addAttribute("correoOculto", enmascararCorreo(usuarioDTO.getCorreo()));
-            return "verificar"; // Se queda en la misma pantalla
+            return "verificar";
         }
 
         if (codigoReal.equals(codigoIngresado)) {
-            // ¡CÓDIGO CORRECTO! -> Guardar en Base de Datos
             usuarioService.registrarUsuarioFinal(usuarioDTO, nombreImagen);
 
-            // Limpiar sesión
             session.removeAttribute("usuarioTemporal");
             session.removeAttribute("codigoVerificacion");
             session.removeAttribute("nombreImagenTemporal");
 
-            redirectAttributes.addFlashAttribute("mensaje", "¡Cuenta verificada! Ya puedes iniciar sesión.");
+            redirectAttributes.addFlashAttribute("mensaje", "¡Cuenta verificada! Ya puedes iniciar sesión. 😄");
             return "redirect:/login";
         } else {
-            // CÓDIGO INCORRECTO
-            model.addAttribute("error", "Código incorrecto, inténtalo de nuevo.");
+            model.addAttribute("error", "Código incorrecto, inténtalo de nuevo. 🚨");
             model.addAttribute("correoOculto", enmascararCorreo(usuarioDTO.getCorreo()));
-            return "verificar"; // Volver a mostrar la vista con error
+            return "verificar";
         }
     }
 
-    // Utilidad para mostrar el correo parcialmente (ej: j***@gmail.com)
     private String enmascararCorreo(String correo) {
         if (correo == null || !correo.contains("@")) return correo;
         String[] partes = correo.split("@");
@@ -149,25 +137,22 @@ public class RegistroController {
     @GetMapping("/reenviar-codigo")
     public String reenviarCodigo(HttpSession session, RedirectAttributes redirectAttributes) {
          RegistroUsuarioDTO usuarioTmp = (RegistroUsuarioDTO) session.getAttribute("usuarioTemporal");
-         
-         // Validación: Si la sesión expiró, mandar al registro
+
          if (usuarioTmp == null) {
              return "redirect:/registro";
          }
 
-         // Generar nuevo código
          String nuevoCodigo = String.valueOf((int) (Math.random() * 900000) + 100000);
          session.setAttribute("codigoVerificacion", nuevoCodigo);
          session.setAttribute("tiempoInicioCodigo", LocalDateTime.now());
          
          System.out.println("Reenviando código: " + nuevoCodigo); // Debug
          
-         // Enviar el nuevo correo bonito
          try {
              emailService.enviarCorreoVerificacion(usuarioTmp.getCorreo(), nuevoCodigo);
-             redirectAttributes.addFlashAttribute("mensaje", "✅ Nuevo código enviado a tu correo.");
+             redirectAttributes.addFlashAttribute("mensaje", "Nuevo código enviado a tu correo. ✅");
          } catch (Exception e) {
-             redirectAttributes.addFlashAttribute("error", "Error al enviar el correo. Intenta nuevamente.");
+             redirectAttributes.addFlashAttribute("error", "Error al enviar el correo. Intenta nuevamente. 🔁");
          }
          
          return "redirect:/verificar";

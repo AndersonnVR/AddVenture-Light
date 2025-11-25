@@ -9,7 +9,7 @@ public class ContraseniasIgualesValidator implements ConstraintValidator<Contras
     @Override
     public boolean isValid(RegistroUsuarioDTO dto, ConstraintValidatorContext context) {
         if (dto.getContrasenia() == null || dto.getConfirmarContrasenia() == null) {
-            return true; // Validación de campos individuales se encargará de esto
+            return true;
         }
 
         boolean coinciden = dto.getContrasenia().equals(dto.getConfirmarContrasenia());

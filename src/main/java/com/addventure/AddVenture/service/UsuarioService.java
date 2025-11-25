@@ -17,8 +17,6 @@ import com.addventure.AddVenture.model.Usuario;
 import com.addventure.AddVenture.repository.LogroRepository;
 import com.addventure.AddVenture.repository.UsuarioRepository;
 
-// Esta clase maneja la lógica de negocio relacionada con los usuarios, 
-//como el registro y la verificación de existencia de correos y nombres de usuario.
 @Service
 public class UsuarioService {
     @Autowired
@@ -30,12 +28,10 @@ public class UsuarioService {
     @Autowired
     private LogroRepository logroRepository;
 
-    // verifica si un correo electrónico ya está registrado en la base de datos.
     public boolean existeCorreo(String correo) {
         return usuarioRepository.existsByCorreo(correo);
     }
 
-    // verifica si un nombre de usuario ya está registrado en la base de datos.
     public boolean existeNombreUsuario(String nombreUsuario) {
         return usuarioRepository.existsByNombreUsuario(nombreUsuario);
     }
@@ -54,14 +50,12 @@ public class UsuarioService {
                 throw new RuntimeException("Error al guardar la imagen de perfil: " + e.getMessage());
             }
         }
-        return "perfil_defecto.png"; // Retorna imagen por defecto si no hay archivo
+        return "perfil_defecto.png";
     }
 
-    // Este método registra un nuevo usuario en la base de datos.
     public Usuario registrarUsuarioFinal(RegistroUsuarioDTO dto, String nombreImagenGuardada) {
         Usuario nuevo = new Usuario();
 
-        //Datos básicos
         nuevo.setNombre(dto.getNombre());
         nuevo.setApellido(dto.getApellido());
         nuevo.setNombreUsuario(dto.getNombreUsuario());
@@ -74,13 +68,12 @@ public class UsuarioService {
         nuevo.setRol("ROLE_USER");
         nuevo.setFotoPerfil(nombreImagenGuardada);
 
-         // Buscar el logro base "Miembro de la comunidad"
         Logro logroComunidad = logroRepository.findByNombre("Miembro de la comunidad")
                 .orElseThrow(() -> new RuntimeException("Logro base no encontrado"));
-
-        // Asignarlo al nuevo usuario
+        
         nuevo.getLogros().add(logroComunidad);
 
         return usuarioRepository.save(nuevo);
     }
+    
 }

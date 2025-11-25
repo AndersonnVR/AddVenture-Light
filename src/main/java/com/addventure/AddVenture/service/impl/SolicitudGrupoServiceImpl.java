@@ -57,20 +57,17 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
 
         Long idGrupo = grupo.getIdGrupo();
 
-        // Verificar si el grupo está activo
         if (!"activo".equalsIgnoreCase(grupo.getEstado())) {
             logger.warn("Usuario '{}' intentó solicitar ingreso a grupo ID {} que no está activo (estado: {})",
                     solicitante.getCorreo(), grupo.getIdGrupo(), grupo.getEstado());
             throw new SolicitudException("El grupo no está activo, no puedes enviar una solicitud en este momento. 😕");
         }
 
-        // Verificar si ya es participante
         if (participanteGrupoService.esUsuarioParticipante(idGrupo, solicitante)) {
             logger.warn("Usuario '{}' ya forma parte del grupo ID {}", solicitante.getCorreo(), idGrupo);
             throw new SolicitudException("¡Ya eres un viajero en este grupo! 🚀");
         }
 
-        // Verificar si ya envió una solicitud
         Optional<SolicitudGrupo> solicitudExistente = solicitudGrupoRepository.findBySolicitanteAndGrupo(solicitante, grupo);
         if (solicitudExistente.isPresent()) {
             EstadoSolicitud estado = solicitudExistente.get().getEstado();
@@ -84,7 +81,6 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
                     throw new SolicitudException("¡Ya eres un viajero en este grupo! 🚀");
                 case CANCELADA:
                 case RECHAZADA:
-                    // Reutilizar la solicitud existente
                     SolicitudGrupo solicitud = solicitudExistente.get();
                     solicitud.setEstado(EstadoSolicitud.PENDIENTE);
                     solicitud.setFechaSolicitud(LocalDateTime.now());
@@ -96,7 +92,6 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
             }
         }
 
-        // Verificar que el grupo esté lleno o existan solicitudes pendientes antes de permitir enviar la solicitud
         int numParticipantes = grupo.getParticipantes().size();
         int max = grupo.getMaxParticipantes();
         boolean haySolicitudesPendientes = !solicitudGrupoRepository.findByGrupoAndEstado(grupo, EstadoSolicitud.PENDIENTE).isEmpty();
@@ -109,7 +104,6 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
                     "Este grupo tiene espacio disponible y no hay solicitudes pendientes. ¡Puedes unirte ahora! 🚀");
         }
 
-        // Crear y guardar la solicitud
         SolicitudGrupo nuevaSolicitud = SolicitudGrupo.builder()
                 .solicitante(solicitante)
                 .grupo(grupo)
@@ -123,21 +117,17 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
     @Override
     @Transactional
     public void cancelarSolicitud(Long idGrupo, Usuario usuarioActual) {
-        // Obtener el grupo o lanzar excepción si no existe
         GrupoViaje grupo = grupoViajeService.obtenerGrupoPorId(idGrupo)
                 .orElseThrow(() -> new EntityNotFoundException("Grupo no encontrado."));
-
-        // Obtener la solicitud del usuario para el grupo o lanzar excepción si no existe
+        
         SolicitudGrupo solicitud = solicitudGrupoRepository
                 .findBySolicitanteAndGrupo(usuarioActual, grupo)
                 .orElseThrow(() -> new SolicitudException("No tienes ninguna solicitud activa para este grupo. 😕"));
-
-        // Verificar que la solicitud esté pendiente antes de cancelarla
+        
         if (!solicitud.getEstado().equals(EstadoSolicitud.PENDIENTE)) {
             throw new SolicitudException("Solo puedes cancelar solicitudes que están pendientes. 🛑");
         }
 
-        // Cambiar el estado de la solicitud a CANCELADA
         solicitud.setEstado(EstadoSolicitud.CANCELADA);
         solicitudGrupoRepository.save(solicitud);
     }
@@ -154,21 +144,18 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
 
         GrupoViaje grupo = solicitud.getGrupo();
 
-        // Validar que el usuario que intenta aceptar sea el creador del grupo
         if (!grupo.getCreador().getId().equals(creador.getId())) {
             logger.warn("Usuario '{}' intentó aceptar solicitud del grupo ID {} sin ser el creador.",
                     creador.getCorreo(), grupo.getIdGrupo());
             throw new SecurityException("Solo el creador del grupo puede aceptar solicitudes.");
         }
 
-        // Verificar que la solicitud esté pendiente
         if (solicitud.getEstado() != EstadoSolicitud.PENDIENTE) {
             logger.warn("Solicitud ID {} no está en estado pendiente. Estado actual: {}", idSolicitud,
                     solicitud.getEstado());
             throw new SolicitudException("Esta solicitud ya ha sido procesada. ✅");
         }
 
-        // Verificar que aún haya espacio en el grupo
         int participantesActuales = grupo.getParticipantes().size();
         if (participantesActuales >= grupo.getMaxParticipantes()) {
             logger.warn("El grupo ID {} ya alcanzó el máximo de participantes. No se puede aceptar la solicitud ID {}.",
@@ -176,7 +163,6 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
            throw new SolicitudException("Este grupo ya está completo. No puedes aceptar más solicitudes. 🚫");
         }
 
-        // Verificar que el solicitante no tenga conflictos de fechas
         Usuario solicitante = solicitud.getSolicitante();
         if (participanteGrupoRepository.existeConflictoDeFechasParaParticipante(solicitante, grupo.getFechaInicio(), grupo.getFechaFin())) {
             logger.warn("No se puede aceptar la solicitud ID {}: el usuario '{}' ya participa en otro grupo con fechas cruzadas ({} - {}).",
@@ -184,15 +170,13 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
             throw new SolicitudException("Este usuario ya participa en otro viaje con fechas que se cruzan. 🚷");
         }
 
-        // Crear nueva participación
         ParticipanteGrupo nuevoParticipante = new ParticipanteGrupo();
         nuevoParticipante.setUsuario(solicitud.getSolicitante());
         nuevoParticipante.setGrupo(grupo);
         nuevoParticipante.setEstado("ACTIVO");
 
         participanteGrupoRepository.save(nuevoParticipante);
-
-        // Actualizar estado de solicitud
+        
         solicitud.setEstado(EstadoSolicitud.ACEPTADA);
         solicitudGrupoRepository.save(solicitud);
 
@@ -214,14 +198,12 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
 
         GrupoViaje grupo = solicitud.getGrupo();
 
-        // Validar que solo el creador pueda rechazar
         if (!grupo.getCreador().getId().equals(creador.getId())) {
             logger.warn("Usuario '{}' intentó rechazar solicitud del grupo ID {} sin ser el creador.",
                     creador.getCorreo(), grupo.getIdGrupo());
             throw new SecurityException("Solo el creador del grupo puede rechazar solicitudes.");
         }
 
-        // Verificar que la solicitud esté pendiente
         if (solicitud.getEstado() != EstadoSolicitud.PENDIENTE) {
             logger.warn("Solicitud ID {} ya fue procesada. Estado: {}", idSolicitud, solicitud.getEstado());
             throw new SolicitudException("Esta solicitud ya ha sido procesada. ✅");
@@ -248,8 +230,7 @@ public class SolicitudGrupoServiceImpl implements SolicitudGrupoService{
         Pageable pageable = PageRequest.of(page, size);
         return solicitudGrupoRepository.findGruposConSolicitudPendiente(usuario, pageable);
     }
-
-    //MÉTODO DE FILTRO -- falta
+    
     @Override
     public Page<GrupoViaje> obtenerGruposFiltrados(Usuario usuario, String destino, LocalDate fechaInicio,
             LocalDate fechaFin, int page, int size) {

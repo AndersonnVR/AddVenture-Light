@@ -24,7 +24,6 @@ public class ItinerarioServiceImpl implements ItinerarioService {
     @Override
     @Transactional(readOnly = true)
     public List<Itinerario> obtenerItinerariosPorGrupo(GrupoViaje grupoViaje) {
-        // Usar el método del repositorio que ordena los itinerarios por número de día
         return itinerarioRepository.findByGrupoOrderByDiaNumeroAsc(grupoViaje);
     }
     
